@@ -1,0 +1,593 @@
+######################################################################################
+Do YOU want to make new super cool advanced scripts for the game?
+Do YOU want to create brand new scenarios and events for the game?
+Do YOU want to understand what the hell is going on?
+Then this guide is for YOU!! Yes, YOU!! Not anyone else, but YOU!!
+
+######################################################################################
+###################VARIABLE OR FIXED VALUE EXPLANATION
+
+Before we delve into things, there's a concept of "variable value" or "fixed value" for most of the commands.
+
+First, "variable value" refers to a value fetched from a variable, or in other words, the game's RAM that the scripting has access to.
+By default, the game has access to a range of RAM between ScriptTEMP_D31B and ScriptTEMP_D31B+($FF*2).
+Each variable is 16-bits in size, even if it only uses the first 8 lower bits.
+
+If the command's description specifies that the argument is a "variable", that means it takes the variable's name or address as an argument.
+It must be in the script's accessible area, otherwise an error will pop-up.
+
+If the command's description does not specify what value it is, default to constant value.
+
+If the command's description specifies that it uses "either an argument value or a fixed value", then it accepts either a RAM address, and get the "variable value" from there, or a constant value.
+Due to how the commands are set-up, you cannot use fixed values that equal the RAM address values that land on variable range. If you really want to use them, you'll have to use raw hex values (you can always check what command is what hex value in ScriptCommands.asm).
+Another limitation, due to how the game diffirentiates between variables and fixed values, is that you cannot use a fixed value between $8000 and $80FF.
+(The high byte of $80 is used to tell the game that it should fetch a variable value.)
+
+
+######################################################################################
+###################SCRIPTING BASICS
+
+These commands don't take much to understand and will be essential in having a good time.
+
+**SceneFadeIn**
+This will fade the scene in. 
+
+(Command size: 1 byte)
+
+
+**SceneFadeOut**
+This will fade the scene out.
+Note that the game automatically fades out upon script end, so you don't need to paste this at the end of your scripts.
+This can used when you need to fade out and then fade in during the event (e.g. location change).
+
+(Command size: 1 byte)
+
+
+**VariableSceneFadeIn**
+This command takes one argument, which is how long does it take to fade in, where 0 - instant, 1 - very fast, and the higher the value is, the longer it will take.
+Additionally, bit 7 determines if the scripting should execute during fade. If set, the script will continue while the screen is fading. Otherwise it won't.
+
+(Command size: 2 bytes)
+
+
+**VariableSceneFadeOut**
+Similar to above, takes an argument that determines how fast the scene fades out and if the script should continue execution during fading.
+
+(Command size: 2 bytes)
+
+
+**LoadTextEntry**
+This command takes two arguments, the first argument is the text entry value, the second is the bank value from which the text entry will be obtained.
+The entry cannot be higher than $07FF.
+Script execution stops until the text is processed.
+
+(Command size: 3 bytes)
+
+
+**LoadVariableTextEntry**
+This command takes three arguments:
+First argument is either a variable value or a fixed value, which is the bank where the text entry will be loaded from.
+Second argument is either a variable value or a fixed value, which is the text entry value.
+Third argument is a flag, if clear, the script will continue executing during text parsing, otherwise it won't.
+
+(Command size: 6 bytes)
+
+
+**Sleep**
+This command is used to halt script's processing for a specified amount of frames. The argument can be between 1 and 65535 (decimal, or $FFFF hexadecimal).
+Can be used for automatic scenes.
+
+(Command size: 3 bytes)
+
+
+**ExecuteSubScript**
+This command executes a subscript. You can define a subscript that can be reused multiple times.
+
+(Command size: 3 bytes)
+
+
+**EndSubscript**
+This command ends the execution of the subscript and returns to the main script.
+
+(Command size: 1 byte)
+
+
+**EndScript**
+This command ends the main script.
+
+(Command size: 1 byte)
+
+
+######################################################################################
+###################CHARACTER MANIPULATION
+
+**FixedLoadCharacter**
+This command loads and displays a character with set parameters.
+First argument is the character you're trying to load.
+Second argument is the character's display value. It can only be the first four values, defined in an enum ("Display", not "Appearance").
+Third argument is the character's expression.
+
+(Command size: 2 bytes)
+
+
+**VariableLoadCharacter**
+Takes either a variable value or a fixed value, which is used to set the character value.
+Note that you'll have to set the character's appearance and emote beforehand, that's how you can show a character with a display value beyond the first 4 values.
+
+(Command size: 3 bytes)
+
+
+**RemoveCharacter**
+Disables character display. Use this if you want to remove the character completely or switch to a different character to avoid graphical glitches.
+
+(Command size: 1 byte)
+
+
+**ShowCharacter**
+Enables character display that was previously disabled. Use this if the **RemoveCharacter** command was used previously to show the same character.
+
+(Command size: 1 byte)
+
+
+**ShowOrRemoveCharater**
+Takes either an argument value or a fixed value, which is used as a flag to change the character's display status.
+
+!!!!This command is not used in vanilla game!!!!
+
+(Command size: 3 bytes)
+
+
+**UpdateCharacterEmote**
+Changes character's emote using an argument, which is.......... a character's emote. Who woulda guessed.
+
+(Command size: 2 bytes)
+
+
+**SetCharacterCoords**
+Changes character's position on-screen. Takes two arguments, both are either variable value or fixed value.
+First argument is X-pos, second is Y-pos.
+This command can be used to load the character in a different spot or move the character on screen if you execute this command repeatidly while using a variable.
+
+(Command size: 5 bytes)
+
+
+**ApplyCharacterFlip**
+This command applies a character image flip, horizontally and/or vertically.
+First argument is either a variable value or a fixed value, indicating if the flip should be enabled/disabled. 0 - Disable, 1 - Enable.
+Second argument is an 8-bit value indicating which flip to change. 0 - X-flip, 1 - Y-flip.
+
+!!!!This command is not used in vanilla game!!!!
+
+(Command size: 4 bytes)
+
+
+######################################################################################
+###################SCENE MANIPULATION
+
+**LoadBackground**
+This command loads a backgroud via an argument. This should be done when the screen is not faded in, otherwise you may see graphical glitches.
+
+(Command size: 2 bytes)
+
+
+**LoadBackgroundAlt**
+Similar to above, but used to show one of the intro backgrounds, which are separate from the rest.
+
+(Command size: 2 bytes)
+
+
+**PlayMusic**
+This command takes an argument, which is the music value that will be played.
+
+(Command size: 2 bytes)
+
+
+**PlaySFX**
+This command takes an argument, which is the SFX value that will be played. Make funny noises with this one.
+
+!!!!This command is not used in vanilla game!!!!
+
+(Command size: 2 bytes)
+
+
+**UpdateCamera**
+Changes camera position.
+First argument is either a variable value or fixed value for X-position.
+Second argument is either a variable value or fixed value for Y-position.
+
+Vanilla game isn't designed in a way where you can freely move the camera. Needless to say...
+
+!!!!This command is not used in vanilla game!!!!
+
+(Command size: 5 bytes)
+
+
+######################################################################################
+###################VARIABLE MANIPULATION
+
+**ModifyVariable_StoreToVar16Bit**
+Performs a (variable) = (variable value or fixed value).
+Where (variable) is the first argument, (variable value or fixed value) is the second argument.
+Stores all 16-bit.
+
+(Command size: 4 bytes)
+
+
+**ModifyVariable_AddToVar16Bit**
+Performs a (variable) += (variable value or fixed value)
+
+Note: Does not account for overflow.
+
+(Command size: 4 bytes)
+
+
+**ModifyVariable_SubFromVar16Bit**
+Performs a (variable) -= (variable value or fixed value)
+
+Note: Does not account for underflow.
+
+(Command size: 4 bytes)
+
+
+**ModifyVariable_LogicalANDVar16Bit**
+Performs a logical AND to a (variable) with (variable value or fixed value)
+(variable) &= (variable value or fixed value)
+
+(Command size: 4 bytes)
+
+
+**ModifyVariable_LogicalORVar16Bit**
+Performs a logical OR to a (variable) with (variable value or fixed value)
+(variable) |= (variable value or fixed value)
+
+(Command size: 4 bytes)
+
+
+**ModifyVariable_LogicalXORVar16Bit**
+Performs a logical XOR to a (variable) with (variable value or fixed value)
+(variable) ^= (variable value or fixed value)
+
+
+(Command size: 4 bytes)
+
+**ModifyVariable_LogicalShiftVarRight**
+Logically shifts (variable) (variable value or fixed value) right amount of times.
+(variable) = (variable)>>(variable value or fixed value)
+
+Note: Logical shift values at 16 or above will do nothing.
+
+(Command size: 4 bytes)
+
+
+**ModifyVariable_LogicalShiftVarLeft**
+Logically shifts (variable) (variable value or fixed value) left amount of times.
+(variable) = (variable)<<(variable value or fixed value)
+
+Note: Logical shift values at 16 or above will do nothing.
+
+(Command size: 4 bytes)
+
+
+**ModifyVariable_MultiplyVar16Bit**
+Multiplies (variable) by (variable value or fixed value).
+(variable) *= (variable value or fixed value)
+
+Note: Does not account for overflow.
+
+(Command size: 4 bytes)
+
+
+**ModifyVariable_StoreToVarFromVar**
+Performs a (variable 1) = (variable 2).
+Where variable 1 is first argument, variable 2 is second argument. Transfers all 16 bits.
+
+(Command size: 3 bytes)
+
+
+**ModifyVariable_StoreToVar8Bit**
+Performs a (variable) = (8-bit value).
+Where (variable) is the first argument, (8-bit value) is the second argument.
+Only stores to first 8 bits.
+
+(Command size: 3 bytes)
+
+
+**ModifyVariable_AddToVar8Bit**
+Performs a (variable) += (8-bit value).
+Where (variable) is the first argument, (8-bit value) is the second argument.
+
+Note: Does account for overflow.
+
+(Command size: 3 bytes)
+
+
+ModifyVariable_SubFromVar8Bit
+Performs a (variable) -= (8-bit value).
+Where (variable) is the first argument, (8-bit value) is the second argument.
+
+Note: Does account for underflow.
+
+(Command size: 3 bytes)
+
+
+**ModifyVariable_16BitRNGStore**
+Stores current RNG value to variable argument, 16-bit.
+
+!!!!This command is not used in vanilla game!!!!
+
+(Command size: 2 bytes)
+
+
+**ModifyVariable_8BitRNGStore**
+Stores current RNG value to variable argument, 8-bit.
+
+(Command size: 2 bytes)
+
+
+######################################################################################
+###################BRANCH INSTRUCTIONS
+
+**ScriptBranch**
+A constant branch, with the destination as an argument.
+
+(Command size: 3 bytes)
+
+
+**VariableScriptBranch**
+This command is used to set up a variable branch.
+First argument is a variable to compare.
+Second argument is the comparison method e.g. ScriptVarCheck_MoreThan, ScriptVarCheck_Equals (see Enums for all possible values).
+Third argument is either a variable value or fixed value that the previous variable is compared against.
+Fourth argument is a branch destination in case the check succeeds. Otherwise it proceeds forward.
+
+(Command size: 7 bytes)
+
+
+**ScriptBranch_VarEqualVal8Bit**
+Conditional branch, checks if variable (argument 1) equals fixed value (argument 2), and takes a branch if true (argument 3).
+Only compares the first 8 bits.
+
+(Command size: 5 bytes)
+
+
+**ScriptBranch_VarGreaterVal8Bit**
+Conditional branch, checks if variable (argument 1) is greater than fixed value (argument 2), and takes a branch if true (argument 3).
+
+(Command size: 5 bytes)
+
+
+**ScriptBranch_VarLessVal8Bit**
+Conditional branch, checks if variable (argument 1) is less than fixed value (argument 2), and takes a branch if true (argument 3).
+
+(Command size: 5 bytes)
+
+
+**ScriptBranch_VarEqualVar16Bit**
+Conditional branch, checks if variable 1 (argument 1) equals variable 2 (argument 2), and takes a branch if true (argument 3).
+Compares all 16-bits.
+
+(Command size: 5 bytes)
+
+
+**ScriptBranch_VarGreaterVar16Bit**
+Conditional branch, checks if variable 1 (argument 1) is greater than variable 2 (argument 2), and takes a branch if true (argument 3).
+
+(Command size: 5 bytes)
+
+**ScriptBranch_VarLessVar16Bit**
+Conditional branch, checks if variable 1 (argument 1) is less than variable 2 (argument 2), and takes a branch if true (argument 3).
+
+(Command size: 5 bytes)
+
+
+**ScriptBranch_SuperGameBoy**
+Takes the branch if the game is played via Super Game Boy.
+
+(Command size: 3 bytes)
+
+
+**ScriptBranch_StrengthCheck**
+A specific kind of branch, it checks if the player's "strength" value, which is FitStat*2 + EnergyStat.
+For every 152 strength the chances of taking the branch are higher (determined by RNG).
+
+First argument is either a variable value or fixed value that determines the "difficulty" of the check, of which there are three.
+Second variable is the branch destination in case the check succeeds.
+
+(Command size: 5 bytes)
+
+
+**DecisionBranches_3Branches**
+Takes a "decision variable" and takes a respective branch if that variable matches (e,g. it takes the first argument's branch if it is equals 0).
+The last branch is always just going forward, skipping the arguments. That means there are only two branch arguments
+
+(Command size: 5 bytes)
+
+
+**DecisionBranches_4Branches**
+Similar to above, but with three branch arguments.
+
+(Command size: 7 bytes)
+
+
+**DecisionBranches_5Branches**
+Five branches with 4 arguments.
+
+(Command size: 9 bytes)
+
+
+**DecisionBranches_6Branches**
+I think you get the idea behind this one. 5 arguments, with the sixth branch skipping over arguments and going forward.
+
+(Command size: 11 bytes)
+
+
+**Skip2Bytes**
+This argument skips 2 bytes forward. Likely a template for a command that would take 2 bytes worth of arguments.
+Can be used as a VERY short jump forward.
+
+!!!!This command is not used in vanilla game!!!!
+
+(Command size: 1 byte)
+
+
+**Skip4Bytes**
+Similar to above, this command skips 4 bytes. Likely a template for a command that would take 4 bytes worth of arguments.
+Can be used as a (still) VERY short jump forward.
+
+!!!!This command is not used in vanilla game!!!!
+
+(Command size: 1 byte)
+
+
+######################################################################################
+###################MESSAGE BOX MANIPULATION
+
+**EnablePlayerChoice_2Options**
+Enables player choice with two options the player can pick between.
+
+The only argument is either a variable or a fixed value which determines how the choices will affect the relationship with a character or characters.
+See "RelationshipModLookup_PlayerChoices_Add.asm", "RelationshipModLookup_PlayerChoices_Substract.asm" and "RelationshipModifiers.asm" for relationship modifiers that can be used.
+
+Make sure to leave blank space in the text for the cursor tile, or it'll override whatever was in its place.
+
+(Command size: 3 bytes)
+
+
+**EnablePlayerChoice_3Options**
+Same as above, but makes the player choose between 3 different choices instead of 2. Same argument and notes as before.
+
+(Command size: 3 bytes)
+
+
+**ClearMessageBox**
+As the name implies, the message box gets cleared when encountering command.
+The text handling can clear message box on its own, making this command limited in use.
+
+!!!!This command is not used in vanilla game!!!!
+
+(Command size: 1 byte)
+
+
+**ForceTextPrintPosition**
+Forces the text to be printed at the specified location.
+First argument is the horizontal tile within message box where the text will be printed.
+Second argument is the vertical tile within message box where the text will be printed.
+Both arguments are 8-bit.
+
+(Command size: 3 bytes)
+
+
+**ClearTileLines**
+Clears a line or lines of tiles.
+All arguments are either variable value or fixed value:
+Argument 1: horizontal tile within message box from where the tiles will be cleared.
+Argument 2: vertical tile within message box from where the tiles will be cleared.
+Argument 3: how many characters to clear on a single line.
+Argument 4: amount of lines of characters to clear.
+
+(Command size: 9 bytes)
+
+
+**ChangeMessagePrinting**
+Changes the way the messages get printed from this point forward.
+All arguments are either variable value or fixed value:
+Argument 1: horizontal tile within message box where the text will be printed.
+Argument 2: vertical tile within message box where the text will be printed.
+Argument 3: how many characters can fit on a single line.
+Argument 4: how many lines of text the current configuration can fit
+
+(Command size: 9 bytes)
+
+
+**PrintVariableValue8Bit**
+Prints an 8-bit value fetched from a variable (in decimal).
+
+(Command size: 2 bytes)
+
+
+**PrintVariableValue16Bit**
+Prints a 16-bit value fetched from a variable (in decimal).
+
+!!!!This command is not used in vanilla game!!!!
+
+(Command size: 2 bytes)
+
+
+######################################################################################
+###################MISC COMMANDS
+
+**LoadScript**
+Loads a different script entry from the current one, with the argument being either a variable value or fixed value.
+
+(Command size: 3 bytes)
+
+
+**LoadScriptWithTransition**
+Loads a different script entry from the current one... but with a transition! Wow! Otherwise it's the same as the previous command.
+
+(Command size: 3 bytes)
+
+
+**AffectRelationshipByGift**
+Used in the gifting event, modifies the character's relationship based on what gift they were given, which is selected by the player.
+Takes one argument, which is either a variable value or fixed value, representing the character whose relationship will be modified.
+
+(Command size: 3 byte)
+
+
+**InviteCharacterForADate**
+Used in the walking out event, when the player decided to invite someone. Bring the character and then item selection that can affect the chances of that someone coming.
+
+(Command size: 1 byte)
+
+
+**MakeTextSkippable**
+This is only used in the intro to make the text scroll slower and unskippable to sync in with the separate CD audio.
+
+(Command size: 1 byte)
+
+
+**SeedRNG**
+Modifies current RNG value with an argument, which is either a variable value or fixed value.
+
+!!!!This command is not used in vanilla game!!!!
+
+(Command size: 3 byte)
+
+
+**Debug_VariableEditor**
+This command enables a debug function that allows you to edit one variable, with an argument being that variable.
+
+You control the cursor at the bottom-left that can switch between 5 digits (representing 5 decimal digits of a 16-bit value) with left and right, pressing up or down modifies that digit (e.g. having it on tens adds and substracts tens).
+Pressing A or B ends the debug editor, though note that it will not get erased, persisting through further scripting (unless there's a transition).
+
+(Note: Despite taking a variable as an argument, it is treated as though it was going to take either a variable value or fixed value, which means it takes one extra byte of space)
+
+(Command size: 3 byte)
+
+
+**Debug_ExpandedVariableEditor**
+This command enables a debug function that allows one to edit/view all of script-accessible variables.
+
+On the left is the variable's ID, in decimal, from 0 to 255, on the right is that variable's value that can be altered. Change between digits/counters with left and right, modify digits with up and down.
+Press A or B to end the debug editor.
+
+Just like with the previous command, the editor will not get erased automatically after ending the function.
+
+(Command size: 1 byte)
+
+
+**DoNothing**
+This command is functionally useless. Likely a template for a command that didn't use any arguments.
+
+!!!!This command is not used in vanilla game!!!!
+
+(Command size: 1 byte)
+
+
+######################################################################################
+###################THE END
+
+I hope this was a useful resource in understanding the different script commands and their functionality. I wish you happy researching or scripting!
+
+If there are any corrections or questions, please let me know (RussianManSMWC via Discord or by creating an issue on Github).

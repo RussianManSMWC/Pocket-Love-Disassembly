@@ -1,0 +1,43 @@
+######################################################################################
+###################BASICS:
+
+The text box area is 18 characters wide and 5 characters tall.
+The text handles automatic wrapping if the width limit is exceeded.
+If height limit is exceeded, the message box will be refreshed and continue printing from there.
+
+The latter especially is not ideal, which is why there are a few text commands to use.
+
+######################################################################################
+###################TEXT COMMANDS:
+
+**TextCommand_LineBreak**
+Puts an automatic line break, use this to end the line and start a new one.
+
+
+**TextCommand_End**
+This marks the end of the message, the script will have to load a different message to continue the dialogue.
+
+
+Additionally, there are a few other commands:
+**TextCommand_InputWait**
+This halts text printing until the player presses A button to continue.
+
+
+**TextCommand_ClearMsg**
+This command clears the contents of the message.
+This should be used at the beginning or the end of the message in the same dialogue, so that the contents of the previous message aren't stuck around.
+
+
+There are also text commands $83 and $84, but they don't have meaningful functionality (in fact, the former's code is stubbed out).
+Neither are used by the game, and are not defined in this disassembly.
+
+######################################################################################
+###################TEXT "COMMANDS":
+
+To fetch player's respective name strings, use "[2ndName]", "[Name]" and "[NickName]" (without quotation marks).
+
+######################################################################################
+###################DICTIONARY:
+
+The game uses a dictionary to compress the text. You define commonly used words that are 3 characters or longer, and the game will paste them with dictionary.
+You don't need to do anything special about text itself, the disassembly will automatically optimize the data using dictionary when encountering a defined word.

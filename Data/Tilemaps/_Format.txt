@@ -1,0 +1,15 @@
+The tilemap format is very straightforward:
+dw [VRAM]
+db [characters per row]
+db [rows]
+
+Then followed by rows of tiles
+
+For example:
+dw $9900
+db 3
+db 2
+db "AAA"
+db "BBB"
+
+The above example will print two consecutive rows of tiles, consisting of "AAA" and "BBB", both are 3 characters long, from VRAM position $9900

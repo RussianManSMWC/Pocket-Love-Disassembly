@@ -1,0 +1,5 @@
+Future updates to consider:
+-Document Super Game Boy stuff
+-Document scripts some more (requires translation)
+-Make an alternate version of RAM map that uses sections and specifies data sizes for defines rather than fixed addresses (similar to Pokemon disassemblies)
+

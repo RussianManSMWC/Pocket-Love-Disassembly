@@ -1,0 +1,14 @@
+Labels follow this format:
+
+[TAG/NAME]_[BANK]_ADDRESS
+(examples: LOOP_00_C000, ThisIsAVeryDescriptiveLabelName_01_8934)
+Tag is used for generic labels that don't have a unique name.
+Bank is the program bank the code is located in.
+
+Tags:
+CODE - marks a block of code
+DATA - marks a block of data
+UNKNOWN - marks a block of unknown code or data. It might be unused.
+LOOP - marks a returning point that is treated as a loop of instructions
+RETURN - marks a return from routine
+POINTERS - marks a block of data pointers

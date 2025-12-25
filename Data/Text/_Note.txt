@@ -1,0 +1,2 @@
+This directory doesn't contain ALL of the game's text.
+Some of the strings are stored as tilemaps, you'll want to head over to Tilemaps directory to find em.

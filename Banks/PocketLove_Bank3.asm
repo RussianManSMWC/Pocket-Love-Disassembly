@@ -1,0 +1,35 @@
+;PRG ROM $C000-$FFFF
+
+SECTION "bank 3", ROMX, BANK[3]
+
+POINTERS_03_4000:
+PointerWithSize EventConditions_03_4028
+PointerWithSize EventOccuranceChances_03_4E9E
+PointerWithSize BackgroundAndMusicPerScene_03_4EAF
+PointerWithSize RelationshipModifierLookup_PerScript_Addition_03_5381
+PointerWithSize RelationshipModifierLookup_PerScript_Substraction_03_5A54
+PointerWithSize RelationshipModifierLookup_PerChoice_Addition_03_5E1D
+PointerWithSize RelationshipModifierLookup_PerChoice_Substraction_03_62E4
+PointerWithSize RelationshipModifierLookup_PerGift_03_678D
+PointerWithSize RelationshipModifiers_03_685D
+PointerWithSize ScriptPoolsPerEvent_03_6A0D
+
+include "Data/EventData/EventConditions.asm"
+
+include "Data/EventData/EventOccuranceChances.asm"
+
+include "Data/EventData/SceneConfiguration.asm"
+
+include "Data/RelationshipModifiers/RelationshipModLookup_ScriptEntries_Add.asm"
+
+include "Data/RelationshipModifiers/RelationshipModLookup_ScriptEntries_Substract.asm"
+
+include "Data/RelationshipModifiers/RelationshipModLookup_PlayerChoices_Add.asm"
+
+include "Data/RelationshipModifiers/RelationshipModLookup_PlayerChoices_Substract.asm"
+
+include "Data/RelationshipModifiers/RelationshipModLookup_Gifts.asm"
+
+include "Data/RelationshipModifiers/RelationshipModifiers.asm"
+
+include "Data/EventData/EventPools.asm"

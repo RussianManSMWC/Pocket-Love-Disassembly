@@ -1,0 +1,117 @@
+Pocket Love Sound Format
+
+This "document" will walk through sound commands used by the sound engine.
+
+######################################################################################
+###################COMMON CHANNEL INSTRUCTIONS:
+
+**SetNote**
+The most basic command that will be your companion in the music making.
+
+This command takes three arguments:
+First argument: Channel property. If this value is set to $6F, the channel will be temporarily disabled.
+Otherwise, it sets the respective channel properties:
+-If the current channel is a noise channel, it sets the 5 upper bits, which are clock shift and width mode bits (the game automatically shifts them, you only need to use 5 lower bits as the value).
+-Otherwise, it sets the channel's frequency, using a frequency lookup table. The frequency is also affected by base frequency offset which is set with a respective command.
+
+Second argiment: Note length. How long the note will be held for. The value can only be between 4 and 128, and should be divisible by 4 (the command will correct the value if off by rounding down).
+The note is affected by tempo (e.g. if tempo is 4 and length is 20, the note will end in 5 frames).
+
+Third argument: Volume array index. This is used to set note volume using pre-defined volumes stored in a volume array, which is set up with a separate command. 
+The index can only be between 0 and 7.
+
+
+**SetTempo**
+This command takes one argument to set the music or sound effect's tempo (or in simpler non-musical terms, the sound's speed).
+
+This should be set once at the beginning of any of the channels. This affects ALL sound channels of the song/SFX.
+
+
+**DefineVolume**
+This instruction defines a volume value that can be quickly referenced in the song or sound effect.
+First argument is an index of the volume value. There can be up to 8 different volume configurations, from 0 to 7.
+Second argument is the volume value.
+
+This should be used at the beginning of the song or SFX to set up commonly used volume values.
+
+
+**SetBaseFrequencyOffset**
+As the name suggests, this command sets base frequency offset that will affect note frequency.
+Negative values lower frequency, positive values increase frequency.
+
+
+**SetChannelPan**
+This command sets which speakers the channel comes from.
+1 - right speaker only, 2 - left speaker only, 3 - both speakers.
+0 cannot be used as a value. The game always defaults to having sound on both speakers.
+
+
+**EnableChannelPanning**
+This command enables channel panning from right to left speaker.
+The command is a bit odd. Current understanding is that its supposed to count up a pan counter until argument value, then switch to different speaker, but that only happens for one note.
+As a result, the speakers only effectively alternate every other note.
+Can technically a value between 0 to 3, but the only reliable value is 1, which is what the game uses.
+
+
+**DisableChannelPanning**
+This command disables channel panning.
+
+!!!!This command is not used in vanilla game!!!!
+
+
+**SoundBranch**
+A constant branch, can be used to set up a sound loop. Useful for music.
+
+
+**SetLoopCounter**
+This command can be used to set a loop counter that would be used to loop through a set of instructions a limited amount of times. 
+
+The first argument is loop counter index from 0 to 3, second argument is the amount of loops to do.
+
+!!!!This command is not used in vanilla game!!!!
+
+
+**CheckLoopCounter**
+This command checks for a loop counter to reach 0.
+
+First argument is the loop counter index from 0 to 3.
+Second argument is a label to which the command will jump if the counter did not reach 0, effectively looping the same set of instructions.
+It could also be used as a conditional branch, like executing a set of notes on one pass, and then executing a set of notes on a different pass.
+
+!!!!This command is not used in vanilla game!!!!
+
+
+**ExecuteDataBlock**
+Executes a set of instructions that can be reused.
+
+
+**ReturnFromDataBlock**
+Data block must end with this instruction.
+
+
+**EndChannelProcessing**
+As the name suggests, the sound channel stops after encountering this command. Useful for SFX.
+
+######################################################################################
+###################CHANNEL SPECIFIC INSTRUCTIONS:
+
+**SetChannelDuty**
+Sets square channel's duty. Only applicable to square channels. Respective values from 0 to 3 are 12.5%, 25$, 50% and 75%.
+
+
+**SetSquare1Sweep**
+Sets square 1's sweep via the argument. Naturally only applicable to square 1 channel.
+
+
+**DisableSquare1Sweep**
+Disables square 1 sweep, as the name suggests.
+
+
+**SetNoiseClockDivisor**
+Sets Noise channel's clock divisor to a value between 0 and 7.
+
+
+######################################################################################
+###################CURRRENTLY UNKNOWN INSTRUCTIONS:
+
+There are SoundCommandFA and SoundCommandFB commands, which do something related to sound volume. They are not used in vanilla game.
