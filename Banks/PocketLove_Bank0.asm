@@ -460,8 +460,8 @@ LD A, [JoypadInputHolding]                                  ;remember inputs fro
 LD C, A                                                     ;
 LD A, $20                                                   ;
 LDH [Reg_JoyPad], A                                         ;read buttons
-LDH A, [Reg_JoyPad]                                         ;
 
+LDH A, [Reg_JoyPad]                                         ;
 LDH A, [Reg_JoyPad]                                         ;twice
 CPL                                                         ;
 SLA A                                                       ;
@@ -3368,7 +3368,7 @@ RETURN_00_121B:
 RET                                                         ;
 
 ScriptExecutionStateCode_WaitForFade_00_121C:
-LD A, [FadeTimer]                                           ;wate until the scene has faded in or out
+LD A, [FadeTimer]                                           ;wait until the scene has faded in or out
 OR A                                                        ;
 JR NZ, RETURN_00_1227                                       ;
 

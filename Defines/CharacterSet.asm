@@ -128,6 +128,6 @@ CHARMAP "_",$80 ;only loaded and used for new game screens (note that the game d
 ;VN strings
 NEWCHARMAP Text_VN, General
 CHARMAP " ",$7F ;VN text uses $7F as empty space
-CHARMAP "[2ndName]",TextCommand_GetPlayerName,$00 ;faux commands that would print player's respective name
-CHARMAP "[Name]",TextCommand_GetPlayerName,$01
-CHARMAP "[NickName]",TextCommand_GetPlayerName,$02
+CHARMAP "[2ndName]",TextCommand_GetPlayerName,PlayerString_SecondName ;faux commands that would print player's respective name
+CHARMAP "[Name]",TextCommand_GetPlayerName,PlayerString_Name
+CHARMAP "[NickName]",TextCommand_GetPlayerName,PlayerString_NickName

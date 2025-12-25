@@ -1,5 +1,5 @@
 #extract all graphics from PocketLove for the game boy.
-#simply run it with PocketLove.gb in the same folder. all generated graphics data will be in the output folder named "GFX".
+#simply run it with "Pocket Love (J) [S].gb" file in the same folder. all generated graphics data will be in the output folder named "GFX".
 #move the "GFX" folder to the same folder as the main project (same folder where you can find "PocketLoveDisassembled.asm" or "Compile.bat", etc)
 
 import os

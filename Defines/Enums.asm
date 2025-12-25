@@ -276,8 +276,8 @@ def MapSpot_07 rb 1                                         ;"Pure Coffee Shop"?
 def MapSpot_ToyStore rb 1                                   ;I guess this one is about stuffed toys...
 def MapSpot_GeneralStore rb 1
 def MapSpot_PetStore rb 1
-def MapSpot_BookShop rb 1
-def MapSpot_SportsShop rb 1
+def MapSpot_BookStore rb 1
+def MapSpot_SportsStore rb 1
 def MapSpot_ToyStore2 rb 1                                  ;and this one is about... just toys...?
 def MapSpot_MediaStore rb 1
 def MapSpot_Library rb 1
