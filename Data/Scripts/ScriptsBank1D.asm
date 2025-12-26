@@ -93,7 +93,7 @@ ModifyVariable_StoreToVarFromVar DecisionVariable, TopCharacterRelationships_Sec
 ScriptLabel_1D_40B8:
 ModifyVariable_StoreToVarFromVar ScriptTEMP_D321, DecisionVariable
 ModifyVariable_StoreToVar8Bit ScriptTEMP_D323, $00
-DecisionBranches_6Branches RurunaEndingCheck_1D_4257, MizukiEndingCheck_1D_4405, YumiEndingCheck_1D_459A, MoriEndingCheck_1D_471A, MariEndingCheck_1D_48B2
+DecisionBranches_6Branches RurunaEndingCheck_1D_4257, MizukiEndingCheck_1D_4405, YumiEndingCheck_1D_459A, MariEndingCheck_1D_471A, MariEndingCheck_1D_48B2
 ScriptBranch_VarEqualVal8Bit DecisionVariable, $05, SuzuneEndingCheck_1D_4A59
 
 ;Every ending checks if combined friendship and love points are at or exceed 300, and love points must be at or exceed 128, then an assortment of stat checks for the best outcome
@@ -673,7 +673,7 @@ LoadTextEntry $0032, TextBank_0D
 Sleep 400
 ScriptBranch ScriptLabel_1D_5567
 
-MoriEndingCheck_1D_471A:
+MariEndingCheck_1D_471A:
 ModifyVariable_StoreToVarFromVar ScriptTEMP_D31B, CurrentSave_MiriFriendPoints
 ModifyVariable_AddToVar16Bit ScriptTEMP_D31B, CurrentSave_MiriLovePoints
 VariableScriptBranch ScriptTEMP_D31B, ScriptVarCheck_LessThan, 300, ScriptLabel_1D_4811
@@ -2636,8 +2636,8 @@ ScriptBranch_VarEqualVal8Bit ScriptTEMP_D31B, BG_Cafe, ScriptLabel_1D_5BE6
 ScriptBranch_VarEqualVal8Bit ScriptTEMP_D31B, BG_ToyStore, ScriptLabel_1D_5BE6
 ScriptBranch_VarEqualVal8Bit ScriptTEMP_D31B, BG_GeneralStore, ScriptLabel_1D_5BE6
 ScriptBranch_VarEqualVal8Bit ScriptTEMP_D31B, BG_PetStore, ScriptLabel_1D_5BE6
-ScriptBranch_VarEqualVal8Bit ScriptTEMP_D31B, BG_SoftwareStore, ScriptLabel_1D_5BE6
-ScriptBranch_VarEqualVal8Bit ScriptTEMP_D31B, BG_ClothesStore, ScriptLabel_1D_5BE6
+ScriptBranch_VarEqualVal8Bit ScriptTEMP_D31B, BG_MediaStore, ScriptLabel_1D_5BE6
+ScriptBranch_VarEqualVal8Bit ScriptTEMP_D31B, BG_SportsStore, ScriptLabel_1D_5BE6
 ScriptBranch_VarEqualVal8Bit ScriptTEMP_D31B, BG_13_1, ScriptLabel_1D_5BE6
 ScriptBranch_VarEqualVal8Bit ScriptTEMP_D31B, BG_BurgerJoint, ScriptLabel_1D_5BE6
 ScriptBranch_VarEqualVal8Bit ScriptTEMP_D31B, BG_Planetarium, ScriptLabel_1D_5BE6

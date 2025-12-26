@@ -29,11 +29,11 @@ include "Banks/PocketLove_Bank12.asm" ;Background graphics and data
 include "Banks/PocketLove_Bank13.asm" ;Background graphics and data
 include "Banks/PocketLove_Bank14.asm" ;Background graphics and data
 include "Banks/PocketLove_Bank15.asm" ;Background graphics and data
-include "Banks/PocketLove_Bank16.asm" ;Character graphics (Ruruna's School, Casual and Warm appearances, Mitzuki, School, Casual and Warm appearances and Yumi's School and Casual appearances)
-include "Banks/PocketLove_Bank17.asm" ;Character graphics (Yumi's Warm appearance, Mori, Miri and Suzume, all with School, Casual and Warm appearances)
-include "Banks/PocketLove_Bank18.asm" ;Character graphics (Suzume's School, Casual and Warm appearances, then Swimsuit appearance for Ruruna, Mitzuki, Miri, Suzume, Momoyo and Mori)
-include "Banks/PocketLove_Bank19.asm" ;Character graphics (Yumi's Swimsuit appearance, hand "characters", then Sideways appearance for Ruruna, Mitzuki, Yumi, Miri and Mori)
-include "Banks/PocketLove_Bank1A.asm" ;Character graphics (Suzume and Momoyo's Sideways appearance, then Intro appearance for all characters)
+include "Banks/PocketLove_Bank16.asm" ;Character graphics (Ruruna's School, Casual and Warm appearances, Mizuki, School, Casual and Warm appearances and Yumi's School and Casual appearances)
+include "Banks/PocketLove_Bank17.asm" ;Character graphics (Yumi's Warm appearance, Mari, Miri and Suzune, all with School, Casual and Warm appearances)
+include "Banks/PocketLove_Bank18.asm" ;Character graphics (Suzune's School, Casual and Warm appearances, then Swimsuit appearance for Ruruna, Mizuki, Miri, Suzune, Momoyo and Mari)
+include "Banks/PocketLove_Bank19.asm" ;Character graphics (Yumi's Swimsuit appearance, hand "characters", then Sideways appearance for Ruruna, Mizuki, Yumi, Miri and Mari)
+include "Banks/PocketLove_Bank1A.asm" ;Character graphics (Suzune and Momoyo's Sideways appearance, then Intro appearance for all characters)
 include "Banks/PocketLove_Bank1B.asm" ;Background graphics and data (includes intro backgrounds)
 include "Banks/PocketLove_Bank1C.asm" ;Script data
 include "Banks/PocketLove_Bank1D.asm" ;Script data + Coding and data for title screen and new game screens

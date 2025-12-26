@@ -17,7 +17,7 @@ db 80,129,0                                                 ;relationship with R
 db 80,129,0                                                 ;relationship with Mizuki
 db 80,129,0                                                 ;relationship with Yumi
 db 32,32,0                                                  ;relationship with Miri
-db 32,32,0                                                  ;relationship with Mori
+db 32,32,0                                                  ;relationship with Mari
 db 80,129,0                                                 ;relationship with Suzune
 db 0,32,0                                                   ;relationship with Momoyo
 

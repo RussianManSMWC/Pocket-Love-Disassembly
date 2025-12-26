@@ -222,8 +222,8 @@ def BG_Cafe rb 1
 def BG_ToyStore rb 1
 def BG_GeneralStore rb 1
 def BG_PetStore rb 1
-def BG_SoftwareStore rb 1
-def BG_ClothesStore rb 1
+def BG_MediaStore rb 1
+def BG_SportsStore rb 1
 def BG_13_1 rb 1 ;Normally not used in any of the scenes, but can appear randomly in the credits
 def BG_BurgerJoint rb 1
 def BG_Planetarium rb 1

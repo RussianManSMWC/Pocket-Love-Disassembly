@@ -59,7 +59,7 @@ include "Data/SpriteDisplayableData.asm"
 
 HandleNewGameFunctionality_1D_7082:
 GoBackToSecondNameEntryScreen_1D_7082:
-CALL LoadHandleSecondNameEntryScreen_1D_71BE                ;
+CALL LoadAndHandleSecondNameEntryScreen_1D_71BE             ;
 
 LD A, [GenericStateChangeIndicator]                         ;
 CP GenericStateChange_Confirm                               ;next name entry screen a go
@@ -313,7 +313,7 @@ db LOW(InitialStatDistributions_1D_62F0.BloodTypeB-InitialStatDistributions_1D_6
 db LOW(InitialStatDistributions_1D_62F0.BloodTypeAB-InitialStatDistributions_1D_62F0)
 db LOW(InitialStatDistributions_1D_62F0.BloodTypeO-InitialStatDistributions_1D_62F0)
 
-LoadHandleSecondNameEntryScreen_1D_71BE:
+LoadAndHandleSecondNameEntryScreen_1D_71BE:
 LD A, LCDControlEnable                                      ;
 LDH [Reg_LCDControlAndRender], A                            ;
 
@@ -554,7 +554,7 @@ LD A, [HL]                                                  ;
 
 LD [NewGameInfoInput_MonthDurationIndex], A                 ;
 CP $02                                                      ;
-JR NZ, CODE_1D_7363                                         ;check the month duration is supposed to be 31 days
+JR NZ, CODE_1D_7363                                         ;check if the month duration is supposed to be 31 days
 
 LD HL, Day31OfMonthstring_1D_738E                           ;draw 31st day
 LD DE, $99CE                                                ;
@@ -770,7 +770,7 @@ CALL InitializeBirthDateSpriteDisplay_1D_7A3C               ;
 LD HL, NewGame_TypedInfo                                    ;
 LD DE, $994B                                                ;
 LD BC, $0002                                                ;
-CALL CopyData_1D_74F9                                       ;
+CALL CopyData_1D_74F9                                       ;draw birth day
 
 CALL InitializeBloodTypeSpriteDisplay_1D_7A95               ;
 
@@ -1748,7 +1748,7 @@ CODE_1D_79DF:
 LD [NewGameInfoInput_VerticalOption], A                     ;
 RET                                                         ;
 
-;probably the last screen before starting the game, giving an overview on the player info
+;the last screen before starting the game, giving an overview on the player info
 HandleNewGameConfirmationScreenFunctionality_1D_79E3:
 LD A, [JoypadInputPress]                                    ;
 BitTest JoypadInput_A, A                                    ;
@@ -2247,7 +2247,7 @@ PressedA_1D_7C9B:
 LD A, SFX_Confirm                                           ;
 LD [SoundQueue], A                                          ;
 
-LD A, $01                                                   ;confirmed
+LD A, GenericStateChange_Confirm                            ;confirmed
 LD [GenericStateChangeIndicator], A                         ;
 RET                                                         ;
 
