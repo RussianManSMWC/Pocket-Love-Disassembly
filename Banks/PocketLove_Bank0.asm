@@ -2032,7 +2032,7 @@ LD HL, $000A                                                ;
 CALL GetPointerWithSize_00_0AEC                             ;
 
 LD DE, ScriptCodeStorage                                    ;
-LD BC, ScriptCommandPointers_02_6EB2.end-ScriptCommandPointers_02_6EB2;pointless cuz we already had size from the pointer with size
+LD BC, ScriptCommandPointers_02_6EB2.end-ScriptCommandPointers_02_6EB2;the size output is in DE, so it has to awkwardly and manually load data size into BC
 CALL CopyData2_00_0C7D                                      ;
 RET                                                         ;
 
@@ -3963,7 +3963,7 @@ LD HL, $0001                                                ;
 CALL GetPointerWithSize_00_0AEC                             ;
 
 LD DE, EventOccuranceChances                                ;
-LD BC, EventOccuranceChances_03_4E9E.end-EventOccuranceChances_03_4E9E ;not using the table size output? I'm shocked, shocked! Well, not that shocked.
+LD BC, EventOccuranceChances_03_4E9E.end-EventOccuranceChances_03_4E9E ;DE is not BC, so it has to load that manually.
 CALL CopyData2_00_0C7D                                      ;
 RET                                                         ;
 
@@ -6731,7 +6731,7 @@ JR NC, HandleMapScreenForDate_00_2366                       ;
 CP GenericStateChange_Cancel                                ;check if player pressed B
 JR NZ, CODE_00_237B                                         ;
 
-XOR A                                                       ;you can't actually cancel out of the date spot selection. I wonder if that wasn't always the case?
+XOR A                                                       ;you can't actually cancel out of the date spot selection.
 LD [GenericStateChangeIndicator], A                         ;
 JR HandleMapScreenForDate_00_2366                           ;
 

@@ -351,16 +351,16 @@ def SpriteDisplayable_CalendarDigit7 rb 1
 def SpriteDisplayable_CalendarDigit8 rb 1
 def SpriteDisplayable_CalendarDigit9 rb 1
 def SpriteDisplayable_TitleHeart rb 1
-def SpriteDisplayable_35 rb 1
-def SpriteDisplayable_36 rb 1
-def SpriteDisplayable_37 rb 1
-def SpriteDisplayable_38 rb 1
-def SpriteDisplayable_39 rb 1
-def SpriteDisplayable_3A rb 1
-def SpriteDisplayable_3B rb 1
-def SpriteDisplayable_3C rb 1
-def SpriteDisplayable_3D rb 1
-def SpriteDisplayable_3E rb 1
+def SpriteDisplayable_CalendarDigit0Center rb 1 ;there's no zero, this is a dupe of 1
+def SpriteDisplayable_CalendarDigit1Center rb 1
+def SpriteDisplayable_CalendarDigit2Center rb 1
+def SpriteDisplayable_CalendarDigit3Center rb 1
+def SpriteDisplayable_CalendarDigit4Center rb 1
+def SpriteDisplayable_CalendarDigit5Center rb 1
+def SpriteDisplayable_CalendarDigit6Center rb 1
+def SpriteDisplayable_CalendarDigit7Center rb 1
+def SpriteDisplayable_CalendarDigit8Center rb 1
+def SpriteDisplayable_CalendarDigit9Center rb 1
 
 def SpriteDisplayable_None = $FF
 

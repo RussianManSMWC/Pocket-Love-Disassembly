@@ -399,27 +399,27 @@ db 1
 
 DATA_1E_58F4:
 dw $9882
-db 17
+db ItemName_MaxLength
 db 1
 
 DATA_1E_58F8:
 dw $98C2
-db 17
+db ItemName_MaxLength
 db 1
 
 DATA_1E_58FC:
 dw $9902
-db 17
+db ItemName_MaxLength
 db 1
 
 DATA_1E_5900:
 dw $9942
-db 17
+db ItemName_MaxLength
 db 1
 
 DATA_1E_5904:
 dw $9982
-db 17
+db ItemName_MaxLength
 db 1
 
 DATA_1E_5908:
@@ -1364,7 +1364,7 @@ LD D, [HL]                                                  ;
 LD HL, CurrentSave_SmartStat                                ;
 LD B, 7                                                     ;
 
-CODE_1E_6967:
+LOOP_1E_6967:
 CALL RandomizeForStats_1E_7A2F                              ;
 JR C, CODE_1E_6970                                          ;
 
@@ -1387,16 +1387,16 @@ LD A, [HL]                                                  ;
 ADD A, C                                                    ;
 JR NC, CODE_1E_697E                                         ;check if about to overflow
 
-LD A, $FF                                                   ;cap
+LD A, 255                                                  ;cap
 
 CODE_1E_697E:
 LD [HL], A                                                  ;
 JR CODE_1E_698A                                             ;
 
 CODE_1E_6981:
-SUB $7F                                                     ;
-
+SUB $7F                                                     ;substract at least 1 point
 LD C, A                                                     ;
+
 LD A, [HL]                                                  ;
 SUB C                                                       ;
 JR NC, CODE_1E_6989                                         ;check if underflow
@@ -1407,10 +1407,10 @@ CODE_1E_6989:
 LD [HL], A                                                  ;
 
 CODE_1E_698A:
-INC HL
-INC HL
-DEC B
-JR NZ, CODE_1E_6967
+INC HL                                                      ;
+INC HL                                                      ;next stat
+DEC B                                                       ;
+JR NZ, LOOP_1E_6967                                         ;
 
 LD A, [DE]                                                  ;cash that is added to player's account
 INC DE                                                      ;
@@ -1452,19 +1452,21 @@ LD [HL+], A                                                 ;
 JR CODE_1E_69BC                                             ;
 
 CODE_1E_69B3:
-SUB $7F                                                     ;
+SUB $7F                                                     ;substract at least 1 point
 LD C, A                                                     ;
+
 LD A, [HL]                                                  ;
 SUB C                                                       ;
 JR NC, CODE_1E_69BB                                         ;
-XOR A                                                       ;
+
+XOR A                                                       ;you're no fun
 
 CODE_1E_69BB:
 LD [HL+], A                                                 ;
 
 CODE_1E_69BC:
 INC HL                                                      ;
-DEC B                                                       ;
+DEC B                                                       ;next set of relationship values
 JR NZ, LOOP_1E_69A3                                         ;
 JP CheckStatAndClubProgression_1E_69E9                      ;
 
@@ -1524,7 +1526,7 @@ JR NC, CODE_1E_6A18                                         ;
 
 LD A, [CurrentSave_SelectedJobOrClub]                       ;
 CP ClubOrJob_HandicraftsClub                                ;
-JR NZ, CODE_1E_6A18                                         ;requires you to be in handicrafts club. Did you accept Ruruna's invitation?
+JR NZ, CODE_1E_6A18                                         ;requires you to be in handicrafts club. Did you accept Ruruna's invitation or apply on your own?
 
 LD A, [CurrentSave_StatProgressEventBits]                   ;
 OR StatProgressBit_SkillHandicrafts                         ;Ruruna can admire your handicraft skills
@@ -1575,7 +1577,7 @@ CALL CheckStatStageProgress_1E_6B0F                         ;
 JR NC, CODE_1E_6A6F                                         ;
 
 LD A, [CurrentSave_StatProgressEventBits]                   ;
-OR StatProgressBit_Sense                                    ;Mari will comment your singing
+OR StatProgressBit_Sense                                    ;Mari will comment on your singing
 LD [CurrentSave_StatProgressEventBits], A                   ;
 
 ;Check if you're in one of the sports clubs
@@ -1586,7 +1588,7 @@ JR Z, CODE_1E_6A7D                                          ;
 CP ClubOrJob_BasketballClub                                 ;
 JR Z, CODE_1E_6A7D                                          ;
 CP ClubOrJob_SoccerClub                                     ;
-RET NZ                                                      ;return if not
+RET NZ                                                      ;return if not in any club
 
 CODE_1E_6A7D:
 SUB ClubOrJob_BaseballClub                                  ;
@@ -5051,12 +5053,12 @@ LD [SpriteDisplayables_ID+5], A                             ;
 LD A, $6C                                                   ;
 LD [SpriteDisplayables_YPos+5], A                           ;
 
-LD A, [SpriteDisplayables_ID+4]                             ;
+LD A, [SpriteDisplayables_ID+4]                             ;check if the tens sprite is non-existent (days 1-9)
 CP $FF                                                      ;
 JR NZ, CODE_1E_7CE3                                         ;
 
-LD A, [SpriteDisplayables_ID+5]                             ;
-ADD A, $0B                                                  ;
+LD A, [SpriteDisplayables_ID+5]                             ;the "ones" sprite will be displayed as one digit, but centerered (using two sprite tiles)
+ADD A, SpriteDisplayable_CalendarDigit0Center-SpriteDisplayable_CalendarDigit0
 LD [SpriteDisplayables_ID+5], A                             ;
 
 LD A, $7C                                                   ;

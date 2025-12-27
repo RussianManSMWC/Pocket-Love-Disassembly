@@ -53,16 +53,16 @@ dw CalendarDigitSprite_7_1D_700E
 dw CalendarDigitSprite_8_1D_7012
 dw CalendarDigitSprite_9_1D_7016
 dw TitleScreenHeart_1D_701A
-dw DATA_1D_703A                                             ;unused duplicate
-dw DATA_1D_703A
-dw DATA_1D_7042
-dw DATA_1D_704A
-dw DATA_1D_7052
-dw DATA_1D_705A
-dw DATA_1D_7062
-dw DATA_1D_706A
-dw DATA_1D_7072
-dw DATA_1D_707A
+dw CalendarDigitSprite_1_Centered_1D_703A                   ;unused duplicate (there's no centered 0)
+dw CalendarDigitSprite_1_Centered_1D_703A
+dw CalendarDigitSprite_2_Centered_1D_7042
+dw CalendarDigitSprite_3_Centered_1D_704A
+dw CalendarDigitSprite_4_Centered_1D_7052
+dw CalendarDigitSprite_5_Centered_1D_705A
+dw CalendarDigitSprite_6_Centered_1D_7062
+dw CalendarDigitSprite_7_Centered_1D_706A
+dw CalendarDigitSprite_8_Centered_1D_7072
+dw CalendarDigitSprite_9_Centered_1D_707A
 
 ;sprite data.
 ;property bit 0 [4th byte] indicates the end of the image. if clear, keep drawing
@@ -474,38 +474,39 @@ db $10,$12,$1A,$80
 db $00,$1A,$1C,$80
 db $10,$1A,$1E,$81
 
-DATA_1D_703A:
+;these are used for when the day is between 1 and 9
+CalendarDigitSprite_1_Centered_1D_703A:
 db $00,$00,$1C,$00
 db $00,$08,$1E,$01
 
-DATA_1D_7042:
+CalendarDigitSprite_2_Centered_1D_7042:
 db $00,$00,$20,$00
 db $00,$08,$22,$01
 
-DATA_1D_704A:
+CalendarDigitSprite_3_Centered_1D_704A:
 db $00,$00,$24,$00
 db $00,$08,$26,$01
 
-DATA_1D_7052:
+CalendarDigitSprite_4_Centered_1D_7052:
 db $00,$00,$28,$00
 db $00,$08,$2A,$01
 
-DATA_1D_705A:
+CalendarDigitSprite_5_Centered_1D_705A:
 db $00,$00,$2C,$00
 db $00,$08,$2E,$01
 
-DATA_1D_7062:
+CalendarDigitSprite_6_Centered_1D_7062:
 db $00,$00,$30,$00
 db $00,$08,$32,$01
 
-DATA_1D_706A:
+CalendarDigitSprite_7_Centered_1D_706A:
 db $00,$00,$34,$00
 db $00,$08,$36,$01
 
-DATA_1D_7072:
+CalendarDigitSprite_8_Centered_1D_7072:
 db $00,$00,$38,$00
 db $00,$08,$3A,$01
 
-DATA_1D_707A:
+CalendarDigitSprite_9_Centered_1D_707A:
 db $00,$00,$3C,$00
 db $00,$08,$3E,$01

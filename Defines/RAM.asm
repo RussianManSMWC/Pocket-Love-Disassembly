@@ -113,8 +113,8 @@ def CameraLock = $C177                                      ;if set, camera won'
 def RandomNumber = $C178                                    ;a pseudo-random number, 16-bit
 
 def ScriptPointerOffset = $C17A                             ;16-bit, used to offset from script table pointer to get proper script data. hope that makes sense. (ScriptTablePointer+ScriptPointerOffset)
-def ScriptBank = $C17C                                      ;contains a bank that points to all dialogue references
-def ScriptTablePointer = $C17D                              ;points to where the script pointer table is located
+def ScriptBank = $C17C                                      ;contains a bank that points to the bank where current script is located in
+def ScriptTablePointer = $C17D                              ;points to where the script pointer table is located in all banks
 def ScriptExecutionState = $C17F
 
 def ScriptSleepTimer = $C182                                ;a timer set up by a script, halts execution for a moment

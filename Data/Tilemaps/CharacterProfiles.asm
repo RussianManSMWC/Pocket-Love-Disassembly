@@ -212,7 +212,6 @@ dw $9942
 db 8
 db 2
 db "さんこうしょ  "
-
 db "けいざいしんぶん"
 
 CharacterProfile_FavePlaces_Miri_50C4:
@@ -220,7 +219,6 @@ dw $99C2
 db 5
 db 2
 db "としょかん"
-
 db "おくじょう"
 
 CharacterProfile_Hobbies_Miri_1E_50D2:
@@ -228,7 +226,6 @@ dw $9942
 db 6
 db 2
 db "いご    "
-
 db "てれびげ~む"
 
 CharacterProfile_PhoneNumber_Miri_1E_50E2:
