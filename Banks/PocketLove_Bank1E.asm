@@ -5054,7 +5054,7 @@ LD A, $6C                                                   ;
 LD [SpriteDisplayables_YPos+5], A                           ;
 
 LD A, [SpriteDisplayables_ID+4]                             ;check if the tens sprite is non-existent (days 1-9)
-CP $FF                                                      ;
+CP SpriteDisplayable_None                                   ;
 JR NZ, CODE_1E_7CE3                                         ;
 
 LD A, [SpriteDisplayables_ID+5]                             ;the "ones" sprite will be displayed as one digit, but centerered (using two sprite tiles)
@@ -5329,8 +5329,7 @@ RET                                                         ;
 DrawItemNamesForCharacterInviteOnWalk_1E_7E4A:
 LD HL, ItemNamesForCharacterInviteOnWalk_1E_4CCB            ;
 LD DE, DynamicTilemapArray                                  ;
-
-LD B, ItemNamesForCharacterInviteOnWalk_1E_4CCB.end-ItemNamesForCharacterInviteOnWalk_1E_4CCB
+LoadDataSizeConstant B, ItemNamesForCharacterInviteOnWalk_1E_4CCB
 CALL CopyData8Bit_1E_6CD5                                   ;
 
 LD A, $01                                                   ;the first "item" is always available (which is a "no special item" choice

@@ -79,7 +79,7 @@ dw .DATA_03_5A3D-RelationshipModifierLookup_PerScript_Addition_03_5381 ;260-267
 dw .DATA_03_5A51-RelationshipModifierLookup_PerScript_Addition_03_5381 ;268
 
 ;how many characters are affected, followed by which character(s), then relationship modifier offset for each or none
-;the character relationship is also modifed based on which script is being currently executed, specifically it's ScriptEntryOffset & 7
+;the character relationship is also modifed based on which script is being currently executed, specifically it's ScriptEntryID & 7
 
 .DATA_03_541D:
 db $00

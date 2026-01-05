@@ -306,7 +306,7 @@ dw ScriptCodeStorage+(.ScriptCommand_ExecuteSubscript_02_7665-ScriptCommandPoint
 dw ScriptCodeStorage+(.ScriptCommand_Skip2Bytes_02_7685-ScriptCommandPointers_02_6EB2) ;29
 dw ScriptCodeStorage+(.ScriptCommand_EndSubscript_02_7692-ScriptCommandPointers_02_6EB2) ;2A
 dw ScriptCodeStorage+(.ScriptCommand_DoNothing_02_76A2-ScriptCommandPointers_02_6EB2) ;2B
-dw ScriptCodeStorage+(.ScriptCommand_PlayMusic_NewGame_76A9-ScriptCommandPointers_02_6EB2) ;2C
+dw ScriptCodeStorage+(.ScriptCommand_PlayMusic_02_76A9-ScriptCommandPointers_02_6EB2) ;2C
 dw ScriptCodeStorage+(.ScriptCommand_PlaySFX_02_76C3-ScriptCommandPointers_02_6EB2) ;2D
 dw ScriptCodeStorage+(.ScriptCommand_VariableSceneFadeIn_02_76DD-ScriptCommandPointers_02_6EB2) ;2E
 dw ScriptCodeStorage+(.ScriptCommand_SceneFadeIn_02_771B-ScriptCommandPointers_02_6EB2) ;2F
@@ -1328,10 +1328,10 @@ LD L, A
 CALL MaybeFetchValueFromVariable_00_12AE
 
 LD A, L
-LD [ScriptEntryOffset], A
+LD [ScriptEntryID], A
 
 LD A, H
-LD [ScriptEntryOffset+1], A
+LD [ScriptEntryID+1], A
 
 LD A, $01                                                   ;loading a new script
 LD [LoadScriptFlag], A                                      ;
@@ -1354,10 +1354,10 @@ LD L, A
 CALL MaybeFetchValueFromVariable_00_12AE
 
 LD A, L
-LD [ScriptEntryOffset], A
+LD [ScriptEntryID], A
 
 LD A, H
-LD [ScriptEntryOffset+1], A
+LD [ScriptEntryID+1], A
 
 LD A, $01
 LD [StopExecutingScriptFlag], A
@@ -2255,7 +2255,7 @@ POP DE                                                      ;
 RET                                                         ;
 
 ;PlayMusic
-.ScriptCommand_PlayMusic_NewGame_76A9:
+.ScriptCommand_PlayMusic_02_76A9:
 LD A, $01
 LD [ContinueProcessingScriptFlag], A
 POP DE

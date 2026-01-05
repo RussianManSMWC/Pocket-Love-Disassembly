@@ -17,7 +17,7 @@ def CharProp_Appearance_Warm rb 1                           ;as in wearing warm 
 def CharProp_Appearance_Swimsuit rb 1
 def CharProp_Appearance_Sideview rb 1
 def CharProp_Appearance_Intro rb 1
-def CharProp_Appearance_Special rb 1                        ;only first three girls have this appearance, and only Ruruna has a special look (other two are hand sprites)
+def CharProp_Appearance_Special rb 1                        ;only first three characters have this appearance, and only Ruruna has a special look (other two are hand sprites)
 
 ;essentially the same as above, but with a small difference. the game's scripting generally uses these values (albeit only the first 4 values, if using FixedLoadCharacter)
 RSRESET

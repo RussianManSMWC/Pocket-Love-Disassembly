@@ -211,7 +211,7 @@ JP RESET_00_0150                                            ;THE END
 StoreOAMUploadCodeToRAM_00_01E2:
 LD DE, OAMUploadCode                                        ;appears to be a pretty standard procedure on the Game Boy. Copy this into HRAM.
 LD HL, OAMUploadCode_00_01F1                                ;
-LD B, OAMUploadCode_00_01F1.end-OAMUploadCode_00_01F1       ;
+LoadDataSizeConstant B, OAMUploadCode_00_01F1               ;
 
 LOOP_00_01EA:
 LD A, [HL+]                                                 ;
@@ -718,7 +718,7 @@ LD B, $04                                                   ;
 LD A, $12                                                   ;
 
 LOOP_00_0464:
-LD C, A
+LD C, A                                                     ;
 XOR A                                                       ;everything is a zero
 LD L, LOW(Sound_CurrentChannelNoteDuration)                 ;
 LD [HL], A                                                  ;
@@ -991,7 +991,7 @@ SoundCommand_DefineVolume_00_05D4:
 AND $07                                                     ;define into one of the 8 slots
 LD C, A                                                     ;
 
-CALL LoadSoundDataByte_00_078E                              ;
+CALL LoadSoundDataByte_00_078E                              ;get the volume
 LD B, A                                                     ;
 
 LD A, LOW(Sound_CurrentChannelPredefinedVolumeArray)        ;
@@ -1298,7 +1298,7 @@ INC A                                                       ;either right or lef
 
 ApplyCurrentChannelPan_00_074C:
 AND $03                                                     ;bit 0 - right speaker, bit 1 - left speaker
-RRA
+RRA                                                         ;
 LD C, A                                                     ;save right speaker bit
 RLA                                                         ;
 AND $01                                                     ;
@@ -1433,9 +1433,9 @@ LD A, [HL+]                                                 ;
 LD [$FF00+C], A                                             ;set frenquency
 INC C                                                       ;
 
-LD A, [Sound_CurrentChannel]
+LD A, [Sound_CurrentChannel]                                ;
 CP APU_Channel_Wave                                         ;check if we're working with wave channel
-JR NZ, CODE_00_07EE
+JR NZ, CODE_00_07EE                                         ;
 
 XOR A                                                       ;disable wave
 LDH [APU_WaveDACPower], A                                   ;
@@ -2032,7 +2032,7 @@ LD HL, $000A                                                ;
 CALL GetPointerWithSize_00_0AEC                             ;
 
 LD DE, ScriptCodeStorage                                    ;
-LD BC, ScriptCommandPointers_02_6EB2.end-ScriptCommandPointers_02_6EB2;the size output is in DE, so it has to awkwardly and manually load data size into BC
+LoadDataSizeConstant BC, ScriptCommandPointers_02_6EB2      ;the size output is in DE, so it has to awkwardly and manually load data size into BC
 CALL CopyData2_00_0C7D                                      ;
 RET                                                         ;
 
@@ -3032,9 +3032,9 @@ LD B, $02                                                   ;
 LD HL, $0005                                                ;
 CALL GetPointerWithSize_00_0AEC                             ;
 
-LD A, [ScriptEntryOffset+1]                                 ;
+LD A, [ScriptEntryID+1]                                     ;
 LD C, A                                                     ;
-LD A, [ScriptEntryOffset]                                   ;
+LD A, [ScriptEntryID]                                       ;
 SLA A                                                       ;
 RL C                                                        ;
 ADD A, L                                                    ;
@@ -3674,11 +3674,11 @@ LD [CalendarCountdownUninterruptedFlag], A                  ;
 EventLoadingLoop_00_137F:
 CALL HandleEventPool_00_13F6                                ;
 
-LD HL, ScriptEntryOffset                                    ;
+LD HL, ScriptEntryID                                        ;
 LD A, [HL+]                                                 ;
 AND [HL]                                                    ;
 INC A                                                       ;
-JR Z, CODE_00_13E7                                          ;check if got to the end of the event pool (ScriptEntryOffset == $FFFF)
+JR Z, CODE_00_13E7                                          ;check if got to the end of the event pool (ScriptEntryID == $FFFF)
 
 ;Something maybe good maybe bad idk might happen~!
 LD A, [CalendarCountdownUninterruptedFlag]                  ;
@@ -3707,10 +3707,10 @@ LD B, $03                                                   ;
 LD HL, $0002                                                ;
 CALL GetPointerWithSize_00_0AEC                             ;
 
-LD A, [ScriptEntryOffset]                                   ;
+LD A, [ScriptEntryID]                                       ;
 LD E, A                                                     ;
 
-LD A, [ScriptEntryOffset+1]                                 ;
+LD A, [ScriptEntryID+1]                                     ;
 LD D, A                                                     ;
 ADD HL, DE                                                  ;
 ADD HL, DE                                                  ;times two
@@ -3725,7 +3725,7 @@ CALL ChangeMusic_00_0B12                                    ;
 POP HL                                                      ;
 
 CODE_00_13CA:
-LD A, [HL]                                                  ;change background
+LD A, [HL]                                                  ;load background
 CP $FF                                                      ;
 JR Z, CODE_00_13D5                                          ;or not
 
@@ -3775,8 +3775,8 @@ LD H, A                                                     ;
 
 XOR A                                                       ;
 DEC A                                                       ;LD A, $FF would've sufficed just as well
-LD [ScriptEntryOffset], A                                   ;anyway, reset script entry variables
-LD [ScriptEntryOffset+1], A                                 ;
+LD [ScriptEntryID], A                                       ;anyway, reset script entry variables
+LD [ScriptEntryID+1], A                                     ;
 
 LOOP_00_140C:
 LD A, [HL+]                                                 ;
@@ -3931,10 +3931,10 @@ OR A                                                        ;
 JP Z, LOOP_00_140C                                          ;keep going
 
 LD A, E                                                     ;a new script will happen
-LD [ScriptEntryOffset], A                                   ;
+LD [ScriptEntryID], A                                       ;
 
 LD A, D                                                     ;
-LD [ScriptEntryOffset+1], A                                 ;
+LD [ScriptEntryID+1], A                                     ;
 
 CODE_00_14AC:
 LD A, L                                                     ;remember where we left off
@@ -3963,7 +3963,7 @@ LD HL, $0001                                                ;
 CALL GetPointerWithSize_00_0AEC                             ;
 
 LD DE, EventOccuranceChances                                ;
-LD BC, EventOccuranceChances_03_4E9E.end-EventOccuranceChances_03_4E9E ;DE is not BC, so it has to load that manually.
+LoadDataSizeConstant BC, EventOccuranceChances_03_4E9E      ;DE is not BC, so it has to load that manually.
 CALL CopyData2_00_0C7D                                      ;
 RET                                                         ;
 
@@ -5233,7 +5233,7 @@ CALL LoadFontGraphics_00_1E66                               ;
 LD A, $02                                                   ;set text drawing without message box
 CALL DrawInfoBoxForVisualNovelSection_00_1E77               ;
 
-StoreWord $0255, ScriptEntryOffset                          ;load initial script when booting the game
+StoreWord $0255, ScriptEntryID                              ;load initial script when booting the game
 
 CALL ResetCurrentSpriteSlot_00_0E2F                         ;
 CALL RemoveRemainingSpriteSlots_00_0E34                     ;
@@ -5662,12 +5662,12 @@ RET                                                         ;
 GetRelationshipModifierArrayByScriptEntry_00_1D86:
 CALL GetPointerWithSize_00_0AEC                             ;
 PUSH HL                                                     ;
-LD A, [ScriptEntryOffset]                                   ;
+LD A, [ScriptEntryID]                                       ;
 LD E, A                                                     ;
 AND $07                                                     ;this is used as a space-saving measure by reducing amount of pointers, with each pointer having 8 different values
 LD B, A                                                     ;
 
-LD A, [ScriptEntryOffset+1]                                 ;
+LD A, [ScriptEntryID+1]                                     ;
 LD D, A                                                     ;
 SRL D                                                       ;
 RR E                                                        ;

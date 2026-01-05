@@ -34,8 +34,12 @@ macro PointerWithSize
   dw \1-$4000, \1.end-\1
 endm
 
+macro LoadDataSizeConstant
+  LD \1, \2.end-\2
+endm
+
 ;table here also must end with .end
-macro GetTableSize
+macro DataSizeTableEntry
   db \1.end-\1
 endm
 

@@ -15,7 +15,7 @@ def FrameCounter8Bit = $C0A6
 def InterruptDisablerMirror = $C0A7                         ;only used in LCD disable routine to preserve interrupts
 def JoypadInputEnabler = $C0A8                              ;non-zero - inputs enabled
 
-def ScriptEntryOffset = $C0B0                               ;used to offset from a general script entry table to get a proper script entry
+def ScriptEntryID = $C0B0                                   ;script ID that gets executed ($FFFF - event pool end)
 
 def EventConditionDataPointer = $C0B2                       ;a 16-bit pointer to the table of event conditions
 def EventConditionDataBank = $C0B4                          ;in which bank the event conditions' table is
@@ -230,7 +230,7 @@ def GenericStateChangeIndicator = $D247                     ;generic RAM indicat
 def PlayerStringType = $D248                                ;this is used for getting and displaying player's name etc. 0 - second name, 1 - name, 2 - nickname
 def PlayerNameMaxCharactersForInput = $D249                 ;used for name and etc entry. zero-non-inclusive (so a value of 4 = 4 characters)
 
-;current session's time variables, 8-bit. for save file time variables specifically, look up CurrentGame_Month and so on
+;current session's time variables, 8-bit. for save file time variables specifically, look up CurrentSave_Month and so on
 def CurrentMonth = $D24A                                    ;zero-inclusive (e.g. 0 = 1, 5 = 6)
 def CurrentDayOfTheMonth = $D24B
 def CurrentDayOfTheWeek = $D24C
