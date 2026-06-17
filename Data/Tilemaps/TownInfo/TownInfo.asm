@@ -221,8 +221,8 @@ TownInfo_Movie_October_1E_648C:
 dw $98A1
 db 10
 db 2
-db "ぽけっと らぶ   "
-db "(れんあい どらま)"
+db "ぽけっと らぶ   "                                             ;hold on, there's an in-universe movie called "Pocket Love"?!
+db "(れんあい どらま)"                                            ;and i was making jokes about how characters would react to the game in-universe. close enough
 
 TownInfo_RecommendedSpot_October_1E_64A4:
 dw $9921

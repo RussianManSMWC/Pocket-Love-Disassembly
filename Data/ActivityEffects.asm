@@ -41,7 +41,7 @@ dw SoccerClubActivityEffect_JustWork_1E_5FD6
 ;depending on the frame counter, the stat distribution will differ, creating a "random" element
 ;after that, one byte for adding cash
 ;the rest are character affection points
-;if bit 7 is set, it'll substract (value*%01111111)+1
+;if bit 7 is set, it'll substract (value&%01111111)+1
 StudyActivityEffect_JustWork_1E_5EDA:
 db $02,$01                                                  ;smart
 db $00,$00                                                  ;fit

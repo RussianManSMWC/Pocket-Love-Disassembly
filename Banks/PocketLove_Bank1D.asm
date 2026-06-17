@@ -10,12 +10,7 @@ SECTION "bank 1D after scripts", ROMX[$6000], BANK[$1D]
 
 include "Data/Tilemaps/NewGameScreens.asm"
 
-;A - confirm, B - cancel
-AAndBPrompt_1D_62C3:
-dw $9A06
-db 13
-db 1
-db "A=けってい B=とりけし"
+include "Data/Tilemaps/AAndBPrompts_1D.asm"
 
 FullScreenTilemapClearData_1D_62D4:
 dw $9800
@@ -63,11 +58,11 @@ CALL LoadAndHandleSecondNameEntryScreen_1D_71BE             ;
 
 LD A, [GenericStateChangeIndicator]                         ;
 CP GenericStateChange_Confirm                               ;next name entry screen a go
-JR Z, CODE_1D_7090                                          ;
+JR Z, GoToFirstNameEntryScreen_1D_7090                      ;
 CP GenericStateChange_Cancel                                ;if cancelled out, return to the title screen
-JR Z, CODE_1D_70ED                                          ;
+JR Z, QuitNewGameOption_1D_70ED                             ;
 
-CODE_1D_7090:
+GoToFirstNameEntryScreen_1D_7090:
 CALL SaveTypedSecondName_1D_7708                            ;
 
 GoBackToFirstNameEntryScreen_1D_7093:
@@ -75,11 +70,11 @@ CALL LoadAndHandleFirstNameEntryScreen_1D_7220              ;
 
 LD A, [GenericStateChangeIndicator]                         ;
 CP GenericStateChange_Confirm                               ;
-JR Z, CODE_1D_70A1                                          ;
+JR Z, GoToNickNameEntryScreen_1D_70A1                       ;
 CP GenericStateChange_Cancel                                ;
 JR Z, GoBackToSecondNameEntryScreen_1D_7082                 ;
 
-CODE_1D_70A1:
+GoToNickNameEntryScreen_1D_70A1:
 CALL SaveTypedFirstName_1D_770D                             ;
 
 GoBackToNickNameEntryScreen_1D_70A4:
@@ -87,14 +82,14 @@ CALL LoadAndHandleNickNameEntryScreen_1D_724D               ;
 
 LD A, [GenericStateChangeIndicator]                         ;
 CP GenericStateChange_Confirm                               ;
-JR Z, CODE_1D_70B2                                          ;
+JR Z, GoToBirthMonthEntryScreen_1D_70B2                     ;
 CP GenericStateChange_Cancel                                ;
 JR Z, GoBackToFirstNameEntryScreen_1D_7093                  ;
 
-CODE_1D_70B2:
+GoToBirthMonthEntryScreen_1D_70B2:
 CALL SaveTypedNickName_1D_7712                              ;
 
-CODE_1D_70B5:
+GoBackToBirthMonthEntryScreen_1D_70B5:
 CALL LoadAndHandleBirthMonthEntryScreen_1D_727A             ;
 
 LD A, [GenericStateChangeIndicator]                         ;
@@ -110,7 +105,7 @@ LD A, [GenericStateChangeIndicator]                         ;
 CP GenericStateChange_Confirm                               ;
 JR Z, GoToBloodTypeSelectionScreen_1D_70D1                  ;
 CP GenericStateChange_Cancel                                ;
-JR Z, CODE_1D_70B5                                          ;
+JR Z, GoBackToBirthMonthEntryScreen_1D_70B5                 ;
 
 GoToBloodTypeSelectionScreen_1D_70D1:
 CALL LoadAndHandleBloodTypeEntryScreen_1D_7394              ;
@@ -130,7 +125,7 @@ JR Z, StartGame_1D_70F0                                     ;
 CP GenericStateChange_Cancel                                ;
 JR Z, GoToBloodTypeSelectionScreen_1D_70D1                  ;
 
-CODE_1D_70ED:
+QuitNewGameOption_1D_70ED:
 LD A, $01                                                   ;not start game, go back to title screen
 RET                                                         ;
 
@@ -318,11 +313,11 @@ LD A, LCDControlEnable                                      ;
 LDH [Reg_LCDControlAndRender], A                            ;
 
 CALL LoadSecondNameEntryScreen_1D_71FE                      ;
-CALL ExecuteNameEntryScreen1D_71C9                          ;
+CALL ExecuteNameEntryScreen_1D_71C9                         ;
 RET                                                         ;
 
 ;general name entry code (name, second name, nickname)
-ExecuteNameEntryScreen1D_71C9:
+ExecuteNameEntryScreen_1D_71C9:
 CALL LoadNameInformation_1D_76A5                            ;
 CALL WaitForVBlank_1D_7527                                  ;
 
@@ -378,7 +373,7 @@ LD A, LCDControlEnable                                      ;
 LDH [Reg_LCDControlAndRender], A                            ;
 
 CALL LoadFirstNameEntryScreen_1D_722B                       ;
-CALL ExecuteNameEntryScreen1D_71C9                          ;
+CALL ExecuteNameEntryScreen_1D_71C9                         ;
 RET                                                         ;
 
 LoadFirstNameEntryScreen_1D_722B:
@@ -408,7 +403,7 @@ LD A, LCDControlEnable                                      ;
 LDH [Reg_LCDControlAndRender], A                            ;
 
 CALL LoadNickNameEntryScreen_1D_7258                        ;
-CALL ExecuteNameEntryScreen1D_71C9                          ;
+CALL ExecuteNameEntryScreen_1D_71C9                         ;
 RET                                                         ;
 
 LoadNickNameEntryScreen_1D_7258:
@@ -556,7 +551,7 @@ LD [NewGameInfoInput_MonthDurationIndex], A                 ;
 CP $02                                                      ;
 JR NZ, CODE_1D_7363                                         ;check if the month duration is supposed to be 31 days
 
-LD HL, Day31OfMonthstring_1D_738E                           ;draw 31st day
+LD HL, Day31OfMonthString_1D_738E                           ;draw 31st day
 LD DE, $99CE                                                ;
 LD BC, $0003                                                ;
 CALL CopyData_1D_74F9                                       ;
@@ -567,7 +562,7 @@ CP $01                                                      ;check if month dura
 JR NZ, CODE_1D_7373                                         ;
 
 CODE_1D_7367:
-LD HL, Day30OfMonthstring_1D_7391                           ;
+LD HL, Day30OfMonthString_1D_7391                           ;
 LD DE, $99AE                                                ;
 LD BC, $0003                                                ;
 CALL CopyData_1D_74F9                                       ;
@@ -587,10 +582,10 @@ ExtraDaysPerMonth_1D_7382:
 db $02,$00,$02,$01,$02,$01,$02,$02
 db $01,$02,$01,$02
 
-Day31OfMonthstring_1D_738E:
+Day31OfMonthString_1D_738E:
 db "31日"
 
-Day30OfMonthstring_1D_7391:
+Day30OfMonthString_1D_7391:
 db "30日"
 
 LoadAndHandleBloodTypeEntryScreen_1D_7394:
@@ -689,7 +684,7 @@ BitTest LCDControlEnable, A                                 ;
 RET Z                                                       ;
 
 LD A, [Reg_InterruptsEnabler]                               ;
-LD [InterruptDisablerMirror], A                             ;
+LD [InterruptEnablerMirror], A                              ;
 ResetBit Interrupt_VBlank, A                                ;
 LD [Reg_InterruptsEnabler], A                               ;
 
@@ -702,7 +697,7 @@ LD A, [Reg_LCDControlAndRender]                             ;
 AND ~LCDControlEnable                                       ;preserve all bits except for LCD control
 LD [Reg_LCDControlAndRender], A                             ;
 
-LD A, [InterruptDisablerMirror]                             ;
+LD A, [InterruptEnablerMirror]                              ;
 LD [Reg_InterruptsEnabler], A                               ;
 RET                                                         ;
 
@@ -1241,7 +1236,7 @@ LD C, A                                                     ;
 LD B, $00                                                   ;
 ADD HL, BC                                                  ;
 LD DE, NewGame_TypedInfo                                    ;
-                                                            ;
+
 LD B, PlayerInfoMaxCharacters                               ;
 
 LOOP_1D_7729:
@@ -1380,6 +1375,7 @@ LD [SoundQueue], A                                          ;
 LD A, [NewGameInfoInput_HorizontalOption]                   ;
 CP $02                                                      ;
 JR Z, CODE_1D_77F7                                          ;
+
 LD A, [NewGameInfoInput_VerticalOption]                     ;
 INC A                                                       ;
 CP $0A                                                      ;
@@ -1427,8 +1423,8 @@ RET                                                         ;
 
 CODE_1D_7824:
 LD A, [NewGameInfoInput_MonthDurationIndex]                 ;check if we're selecting days for february and about to wrap around
-CP $00
-JR NZ, CODE_1D_7816
+CP $00                                                      ;
+JR NZ, CODE_1D_7816                                         ;
 
 LD A, [NewGameInfoInput_HorizontalOption]                   ;
 XOR $01                                                     ;can only wrap between 10 and 20
@@ -1515,7 +1511,7 @@ XOR A                                                       ;
 LD [DE], A                                                  ;
 INC DE                                                      ;
 
-CALL HandleOtherBirthInfoSprites_1D_7A05
+CALL HandleOtherBirthInfoSprites_1D_7A05                    ;
 RET                                                         ;
 
 CursorXPositionForOtherBirthInfoSelection_1D_789D:
@@ -1589,8 +1585,7 @@ RET                                                         ;
 
 CODE_1D_7904:
 LD A, [NewGameInfoInput_VerticalOption]                     ;
-LD [NewGame_TypedBirthMonth] , A                            ;
-
+LD [NewGame_TypedBirthMonth], A                             ;
 LD [NewGame_CurrentBirthInfo], A                            ;
 CALL InitializeBirthDateSpriteDisplay_1D_7A3C               ;
 
@@ -1752,13 +1747,13 @@ RET                                                         ;
 HandleNewGameConfirmationScreenFunctionality_1D_79E3:
 LD A, [JoypadInputPress]                                    ;
 BitTest JoypadInput_A, A                                    ;
-JR NZ, CODE_1D_79EF                                         ;
+JR NZ, PressedA_1D_79EF                                     ;
 
 BitTest JoypadInput_B, A                                    ;
-JR NZ, CODE_1D_79FA                                         ;
+JR NZ, PressedB_1D_79FA                                     ;
 RET                                                         ;
 
-CODE_1D_79EF:
+PressedA_1D_79EF:
 LD A, SFX_Confirm                                           ;
 LD [SoundQueue], A                                          ;
 
@@ -1766,7 +1761,7 @@ LD A, GenericStateChange_Confirm                            ;confirmed, finally 
 LD [GenericStateChangeIndicator], A                         ;
 RET                                                         ;
 
-CODE_1D_79FA:
+PressedB_1D_79FA:
 LD A, SFX_Cancel                                            ;
 LD [SoundQueue], A                                          ;
 
@@ -1794,7 +1789,7 @@ LD HL, NewGame_TypedInfo                                    ;
 LD B, 2                                                     ;2 characters long
 LD C, $50                                                   ;x-pos
 
-CODE_1D_7A21:
+LOOP_1D_7A21:
 LD A, $20                                                   ;constant y-pos
 LD [DE], A                                                  ;
 INC DE                                                      ;
@@ -1818,7 +1813,7 @@ LD [DE], A                                                  ;
 INC DE                                                      ;
 
 DEC B                                                       ;
-JR NZ, CODE_1D_7A21                                         ;
+JR NZ, LOOP_1D_7A21                                         ;
 
 LD A, $03                                                   ;
 LD [LatestOAMSlot], A                                       ;
@@ -1918,7 +1913,7 @@ db " O"
 ;2 - nickname
 GetPlayerStringFromSaveFile_1D_7ABF:
 LD DE, NewGame_TypedInfo                                    ;
-LD HL, CurrentSave_PlayerSecondName                         ;       
+LD HL, CurrentSave_PlayerSecondName                         ;
 LD A, [PlayerStringType]                                    ;
 SLA A                                                       ;
 SLA A                                                       ;
@@ -1932,8 +1927,9 @@ LD C, $00                                                   ;
 
 LOOP_1D_7AD6:
 LD A, [HL+]                                                 ;
-CP $00                                                      ;
+CP $00                                                      ;this does nothing
 LD [DE], A                                                  ;
+
 INC DE                                                      ;
 DEC B                                                       ;
 JR NZ, LOOP_1D_7AD6                                         ;
@@ -2052,8 +2048,8 @@ LD [TilemapDrawing_VRAMLoc], A                              ;
 LD A, [TilemapDrawing_VRAMLoc+1]                            ;
 ADC A, $00                                                  ;
 LD D, A                                                     ;
-
 LD [TilemapDrawing_VRAMLoc+1], A                            ;
+
 LD A, [TilemapDrawing_TilesPerLine]                         ;
 LD C, A                                                     ;
 JR LOOP_1D_7B51                                             ;
@@ -2206,7 +2202,7 @@ LD A, $58                                                   ;
 LD [SpriteDisplayables_YPos], A                             ;
 
 XOR A                                                       ;
-LD [NewGameInfoInput_VerticalOption], A                     ;
+LD [TitleScreen_SelectedOption], A                          ;
 LD [GenericStateChangeIndicator], A                         ;
 RET                                                         ;
 
@@ -2227,7 +2223,7 @@ LD A, $58                                                   ;
 LD [SpriteDisplayables_YPos], A                             ;
 
 XOR A                                                       ;
-LD [NewGameInfoInput_VerticalOption], A                     ;
+LD [TitleScreen_SelectedOption], A                          ;
 LD [GenericStateChangeIndicator], A                         ;
 RET                                                         ;
 
@@ -2349,7 +2345,7 @@ LD A, $60                                                   ;
 LD [SpriteDisplayables_YPos], A                             ;
 
 XOR A                                                       ;
-LD [NewGameInfoInput_VerticalOption], A                     ;
+LD [LoadSaveWindow_SelectedSave], A                         ;
 LD [GenericStateChangeIndicator], A                         ;
 RET                                                         ;
 
@@ -2462,7 +2458,7 @@ LD [CurrentDayOfTheMonth], A                                ;
 RETURN_1D_7DD8:
 RET                                                         ;
 
-;how many days are playable in each month. the player starts on 14th of april, which means there are only 17 days that the player goes through.
+;how many days are playable in each month. the player starts on 14th of april, which means there are only 16 days that the player goes through (dunno why it starts with rest of the month +1).
 ;...except the game ends on 25th of december, so 
 AvailableDaysPerMonth_1D_7DD9:
 db 17,31,30,31,31,30,31,30,31
@@ -2773,7 +2769,7 @@ CP BloodType_AB                                             ;and has AB blood ty
 RET NZ                                                      ;
 
 LD HL, CurrentSave_CharacterRelationship                    ;all character relationships become zero. An easter egg of sorts? Hard mode?
-LD B, (7*3)*3                                               ;
+LD B, 63                                                    ;(this appears to also affect some RAM addresses after that for some reason)
 XOR A                                                       ;
 
 LOOP_1D_7F6C:

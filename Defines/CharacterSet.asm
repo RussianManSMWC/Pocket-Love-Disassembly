@@ -80,7 +80,7 @@ CHARMAP "ぴ",$57
 CHARMAP "ぷ",$58
 CHARMAP "ぺ",$59
 CHARMAP "ぽ",$5A
-CHARMAP "ス",$5B ;a tiny amount of kanji
+CHARMAP "ス",$5B ;a tiny amount of katakana
 CHARMAP "セ",$5C
 CHARMAP "ン",$5D
 CHARMAP "月",$5E ;week days. this one is monday (also used for month e.g. 11月 - november)

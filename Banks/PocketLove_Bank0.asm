@@ -307,7 +307,7 @@ LD L, A                                                     ;
 LD A, [ScriptSleepTimer+1]                                  ;
 LD H, A                                                     ;
 OR L                                                        ;
-JR Z, CODE_00_0270                                          ;check if script n
+JR Z, CODE_00_0270                                          ;check if script executor is sleeping. sweet dreams.
 
 DEC HL                                                      ;tick the timer
 
@@ -321,7 +321,6 @@ CODE_00_0270:
 LD A, [Script16BitCounter]                                  ;
 LD L, A                                                     ;
 LD A, [Script16BitCounter+1]                                ;16-bit counter that can be accessed by scripting
-
 LD H, A                                                     ;
 OR L                                                        ;
 JR Z, CODE_00_0284                                          ;
@@ -620,7 +619,7 @@ CALL SoundCommand_DisableSquare1Sweep_00_05E1               ;
 
 LD HL, APU_WavePattern                                      ;
 LD BC, InitialWavePattern_00_0410                           ;
-LD D, $10                                                   ;
+LoadDataSizeConstant D, InitialWavePattern_00_0410          ;
 
 LOOP_00_03F0:
 LD A, [BC]                                                  ;copy wave pattern table
@@ -653,6 +652,7 @@ RET                                                         ;
 InitialWavePattern_00_0410:
 db $01,$23,$45,$67,$89,$AB,$CD,$EF
 db $FE,$DC,$BA,$98,$76,$54,$32,$10
+.end
 
 ;used to start playing SFX or music
 StartPlayingSFXOrMusic_00_0420:
@@ -664,12 +664,12 @@ JR NC, CODE_00_0451                                         ;
 
 ;init music
 LD DE, Sound_CurrentChannelDataIndex                        ;
-CALL CODE_00_0432                                           ;
+CALL GetSoundSequnces_00_0432                               ;
 
 LD H, HIGH(Sound_CurrentChannelDataStack)                   ;
 JP CODE_00_045B                                             ;
 
-CODE_00_0432:
+GetSoundSequnces_00_0432:
 ADD A, A                                                    ;
 ADD A, A                                                    ;left shift twice
 LD HL, MusicAndSFXChannelConfigurations_01_4000             ;
@@ -706,7 +706,7 @@ RET                                                         ;
 CODE_00_0451:
 AND $7F                                                     ;
 LD DE, Sound_SFX_CurrentChannelDataIndex                    ;
-CALL CODE_00_0432                                           ;
+CALL GetSoundSequnces_00_0432                               ;
 
 LD H, HIGH(Sound_SFX_CurrentChannelDataIndex)               ;
 
@@ -847,7 +847,7 @@ RET                                                         ;
 ProcessSoundData_00_052B:
 LD [Sound_CurrentChannelRAMOffset], A                       ;
 
-LD L, LOW(Sound_CurrentChannelDataIndex)
+LD L, LOW(Sound_CurrentChannelDataIndex)                    ;
 LD A, [HL]                                                  ;
 LD C, $80                                                   ;
 CP C                                                        ;
@@ -2903,7 +2903,7 @@ BitTest LCDControlEnable, A                                 ;
 RET Z                                                       ;
 
 LD A, [Reg_InterruptsEnabler]                               ;
-LD [InterruptDisablerMirror], A                             ;
+LD [InterruptEnablerMirror], A                              ;
 ResetBit Interrupt_VBlank, A                                ;
 LD [Reg_InterruptsEnabler], A                               ;
 
@@ -2916,7 +2916,7 @@ LD A, [Reg_LCDControlAndRender]                             ;
 AND ~LCDControlEnable                                       ;preserve all bits except for LCD control
 LD [Reg_LCDControlAndRender], A                             ;
 
-LD A, [InterruptDisablerMirror]                             ;
+LD A, [InterruptEnablerMirror]                              ;
 LD [Reg_InterruptsEnabler], A                               ;
 RET                                                         ;
 
@@ -6601,6 +6601,7 @@ CALL GetCharacterNameForPhoneCall_00_320D                   ;character name from
 
 XOR A                                                       ;empty space before character name
 LD [DynamicTilemapArray+4], A                               ;
+
 LD HL, DynamicTilemapArray                                  ;
 CALL DrawFromTilemap_1E_79B0                                ;
 
@@ -6742,6 +6743,7 @@ SLA A                                                       ;
 LD C, A                                                     ;
 LD B, $00                                                   ;
 ADD HL, BC                                                  ;
+
 LD A, [CurrentlySelectedMapSpot]                            ;
 LD [HL], A                                                  ;save this spot you went to
 LD [ChosenMapSpot], A                                       ;
@@ -7842,7 +7844,7 @@ InvitingCharacterToADateOnPhone_00_2A35:
 CALL DrawPhoneCallGeneralMessages_00_3159                   ;
 CALL DrawCharacterMessagesAfterProposingADate_1E_7C54       ;
 
-LD A, [SelectedOption]
+LD A, [SelectedOption]                                      ;
 LD B, $00                                                   ;can't use an item when calling them
 CALL CheckDateInvitationSuccess_00_3D9B                     ;the important question is, do they like you well enough?
 JR C, CODE_00_2A57                                          ;if so, then can schedule a date
@@ -7892,10 +7894,10 @@ JR NZ, CODE_00_2A83                                         ;
 
 LD A, [CurrentSave_DaysPassed]                              ;
 LD [CurrentDayBackup], A                                    ;temporarily save current day
-INC A
+INC A                                                       ;
 LD [DatePlanner_DayCount], A                                ;start searching for day offs after current day
 
-LD HL, AvailableDaysForDateArray
+LD HL, AvailableDaysForDateArray                            ;
 LD B, $00                                                   ;
 
 LOOP_00_2A96:
@@ -8715,6 +8717,7 @@ TransferData_00_2FA1:
 CheckPPUModes                                               ;
 LD A, [HL]                                                  ;
 LD [DE], A                                                  ;
+
 LDH A, [Reg_LCDStatus]                                      ;
 BIT 1, A                                                    ;
 JR NZ, TransferData_00_2FA1                                 ;
@@ -8863,7 +8866,7 @@ CALL HandleSpriteDisplayables_00_3F25                       ;
 
 LD A, [JoypadInputPress]                                    ;
 BitTest JoypadInput_A, A                                    ;
-JR NZ, CODE_00_30A8                                         ;wait for player to press A to transition from message
+JR NZ, PressedA_00_30A8                                     ;wait for player to press A to transition from message
 
 LD A, [CurrentScreen_AdvanceSymbolTimer]                    ;
 INC A                                                       ;
@@ -8887,7 +8890,7 @@ CODE_00_30A3:
 CALL ClearTilemap_1E_79F0                                   ;
 JR LOOP_00_3072                                             ;
 
-CODE_00_30A8:
+PressedA_00_30A8:
 LD A, SFX_Confirm                                           ;dismissed message, can continue
 LD [SoundQueue], A                                          ;
 
@@ -9114,8 +9117,8 @@ LD HL, CharacterNameListOffsets_00_322B                     ;
 LD C, A                                                     ;
 LD B, $00                                                   ;
 ADD HL, BC                                                  ;
-
 LD A, [HL]                                                  ;
+
 LD HL, CharacterNameList_1E_45BE                            ;
 LD C, A                                                     ;
 LD B, $00                                                   ;
@@ -9131,7 +9134,7 @@ DEC B                                                       ;
 JR NZ, LOOP_00_3224                                         ;
 RET                                                         ;
 
-;4 skips over intiial tilemap info
+;4 skips over initial tilemap info
 CharacterNameListOffsets_00_322B:
 db 4
 db 4+(CharacterName_MaxLength*1)
@@ -9145,23 +9148,23 @@ db 4+(CharacterName_MaxLength*6)
 ;B - item ID
 ;C - position of the string index
 DrawItemName_00_3232:
-PUSH HL
-PUSH DE
-PUSH BC
-LD A, B
-LD [$D231], A
+PUSH HL                                                     ;
+PUSH DE                                                     ;
+PUSH BC                                                     ;
+LD A, B                                                     ;
+LD [CurrentItemID], A                                       ;
 
-LD A, C
-LD [$D22F], A
-LD HL, ItemNameStringPositionPointers_1E_58DC
-CALL GetPointer_00_2F03
-CALL StoreTilemapLocationToRAM_1E_7333
+LD A, C                                                     ;
+LD [CurrentItemPositionInList], A                           ;
+LD HL, ItemNameStringPositionPointers_1E_58DC               ;
+CALL GetPointer_00_2F03                                     ;
+CALL StoreTilemapLocationToRAM_1E_7333                      ;
 
-PUSH DE
-LD A, [$D231]
-LD HL, ItemNamePointers_1E_591C
-CALL GetPointer_00_2F03
-POP DE
+PUSH DE                                                     ;
+LD A, [CurrentItemID]                                       ;
+LD HL, ItemNamePointers_1E_591C                             ;
+CALL GetPointer_00_2F03                                     ;
+POP DE                                                      ;
 
 LD B, ItemName_MaxLength                                    ;
 
@@ -9643,7 +9646,7 @@ CALL HandleSpriteDisplayables_00_3F25                       ;
 
 CALL WaitForVBlank_00_0382                                  ;
 
-LD HL, ProgressSavedMessage_1E_427E  ;
+LD HL, ProgressSavedMessage_1E_427E                         ;
 CALL ScheduleScreen_ClearSelectionWindowAndDraw_00_3BB1     ;
 JP GenericMessageHandling_00_3023                           ;
 
@@ -9971,6 +9974,7 @@ JR NZ, RETURN_00_3710                                       ;
 
 XOR A                                                       ;
 LD [TransitionToScheduleScreenFromTitleScreenFlag], A       ;other screens do the transition so this is not needed anymore
+
 CALL GenericScreenTransition_00_2FB2                        ;
 
 RETURN_00_3710:
@@ -10315,15 +10319,15 @@ LD B, $00                                                   ;
 ADD HL, BC                                                  ;
 LD C, [HL]                                                  ;
 
-LD A, [UnobtainedItemCount]                                 ;
-SUB C                                                       ;
+LD A, [UnobtainedItemCount]                                 ;unobtained items...
+SUB C                                                       ;minus obtained ones
 CP $06                                                      ;
-JR C, CODE_00_38FC                                          ;
+JR C, CODE_00_38FC                                          ;less than or max amount of displayed items should be okay
 
-LD A, 5                                                     ;display up to 5 items at once
+LD A, 5                                                     ;all items should display on this page
 
 CODE_00_38FC:
-LD [$D235], A
+LD [ItemCountOnCurrentPage], A                              ;
 
 LD DE, PlayerInventoryArray                                 ;
 LD B, $00                                                   ;
@@ -10356,19 +10360,19 @@ LD A, B                                                     ;
 LD [HL+], A                                                 ;draw this item's name
 CALL DrawItemNameInShop_00_3961                             ;
 
-LD A, [$D235]
+LD A, [ItemCountOnCurrentPage]                              ;
 DEC A                                                       ;amount of items to comb through minus 1
-LD [$D235], A
+LD [ItemCountOnCurrentPage], A                              ;
 INC C                                                       ;amount of items on current page +1
 
 CODE_00_3929:
-INC DE
-INC B
-LD A, [$D235]
-CP $00
+INC DE                                                      ;
+INC B                                                       ;
+LD A, [ItemCountOnCurrentPage]                              ;
+CP $00                                                      ;
 JR NZ, LOOP_00_3917                                         ;check if drew all item names
 
-LD A, $05
+LD A, $05                                                   ;
 CP C                                                        ;check if current page displays all 5 items
 RET Z                                                       ;
 
@@ -10416,16 +10420,17 @@ PUSH HL                                                     ;
 PUSH DE                                                     ;
 PUSH BC                                                     ;
 LD A, B                                                     ;
-LD [$D231], A
+LD [CurrentItemID], A                                       ;save which item to draw the name of
 
 LD A, C                                                     ;
-LD [$D22F], A
-LD HL, ItemNameStringPositionPointers_1E_58DC
-CALL GetPointer_00_2F03
-CALL StoreTilemapLocationToRAM_1E_7333
+LD [CurrentItemPositionInList], A                           ;save where to draw the name
+
+LD HL, ItemNameStringPositionPointers_1E_58DC               ;
+CALL GetPointer_00_2F03                                     ;
+CALL StoreTilemapLocationToRAM_1E_7333                      ;
 
 PUSH DE                                                     ;
-LD A, [$D231]
+LD A, [CurrentItemID]                                       ;
 LD HL, ItemNamePointers_1E_591C                             ;
 CALL GetPointer_00_2F03                                     ;
 
@@ -10433,16 +10438,16 @@ POP DE                                                      ;
 LD B, ItemName_MaxLength                                    ;
 CALL CopyData8Bit_1E_6CD5                                   ;
 
-LD HL, DynamicTilemapArray
+LD HL, DynamicTilemapArray                                  ;
 CALL DrawFromTilemap_1E_79B0                                ;draw item name
 
-LD A, [$D22F]
-LD HL, ItemPriceStringPositionPointers_1E_58E6
-CALL GetPointer_00_2F03
-CALL StoreTilemapLocationToRAM_1E_7333
+LD A, [CurrentItemPositionInList]                           ;
+LD HL, ItemPriceStringPositionPointers_1E_58E6              ;
+CALL GetPointer_00_2F03                                     ;
+CALL StoreTilemapLocationToRAM_1E_7333                      ;
 
-LD A, [$D231]
-CALL GetItemPrice_00_310D
+LD A, [CurrentItemID]                                       ;
+CALL GetItemPrice_00_310D                                   ;now get the price which will also be displayed
 
 LD HL, ItemPrice                                            ;
 CALL DisplayItemPrice_00_293F                               ;
@@ -10633,7 +10638,7 @@ CALL DrawClubOptionStrings_1E_7F4D                          ;
 
 HandleClubActivityOptions_00_3A9C:
 CALL HandleSpriteDisplayables_00_3F25                       ;
-CALL HandleClubOrJobActivityOptionsFunctionality_1E_71CC
+CALL HandleClubOrJobActivityOptionsFunctionality_1E_71CC    ;
 
 LD A, [GenericStateChangeIndicator]                         ;check if player didn't do anything drastic, like confirming a choice or cancelling outright
 CP GenericStateChange_Nothing                               ;
@@ -10817,7 +10822,7 @@ RET                                                         ;
 ;input HL - data to draw over the window
 ScheduleScreen_ClearSelectionWindowAndDraw_00_3BB1:
 PUSH HL                                                     ;
-LD HL, TilemapClear_ScheduleScreen_ActionInfoBox_1E_5465;
+LD HL, TilemapClear_ScheduleScreen_ActionInfoBox_1E_5465    ;
 CALL ClearTilemap_1E_79F0                                   ;
 POP HL                                                      ;
 JP DrawFromTilemap_1E_79B0                                  ;
@@ -11060,8 +11065,8 @@ CALL GetDigit_00_3D43                                       ;
 
 LD A, B                                                     ;
 LD [DecimalDigitArray+1], A                                 ;
-LD HL, DigitCheckValues_Hundreds_00_3D80                    ;
 
+LD HL, DigitCheckValues_Hundreds_00_3D80                    ;
 LD B, 9                                                     ;
 CALL GetDigit_00_3D43                                       ;
 
@@ -11072,15 +11077,15 @@ LD [DecimalDigitArray+2], A                                 ;
 LD HL, DigitCheckValues_Tens_00_3D92                        ;
 LD B, 9                                                     ;
 
-CODE_00_3D01:
+LOOP_00_3D01:
 LD A, [HL]                                                  ;
 CP E                                                        ;
 JR Z, CODE_00_3D11                                          ;if equals, go ahead
-JR C, CODE_00_3D11                                          ;if value we're checking
+JR C, CODE_00_3D11                                          ;if less than, proceed
 
 INC HL                                                      ;
 DEC B                                                       ;
-JR NZ, CODE_00_3D01                                         ;
+JR NZ, LOOP_00_3D01                                         ;
 
 XOR A                                                       ;0
 LD [DecimalDigitArray+3], A                                 ;
@@ -11089,6 +11094,7 @@ JR CODE_00_3D1A                                             ;
 CODE_00_3D11:
 LD A, B                                                     ;
 LD [DecimalDigitArray+3], A                                 ;
+
 LD A, [HL]                                                  ;
 LD C, A                                                     ;
 
@@ -11146,7 +11152,7 @@ GetDigit_00_3D43:
 LD A, [HL+]                                                 ;check if high byte is above a value from the table
 CP D                                                        ;
 JR Z, CODE_00_3D4E                                          ;check if not equal
-JR C, FoundDigit_00_3D56                                    ;check if less
+JR C, FoundDigit_00_3D56                                    ;check more
 
 CODE_00_3D49:
 INC HL                                                      ;

@@ -261,83 +261,87 @@ incbin "GFX/Font.bin"
 SETCHARMAP Text_VN
 
 ;data and code that is transferred to RAM
+
+
 ScriptCommandPointers_02_6EB2:
-dw ScriptCodeStorage+(.ScriptCommand_EndScript_02_6F4A-ScriptCommandPointers_02_6EB2) ;0
-dw ScriptCodeStorage+(.ScriptCommand_MakeTextSkippable_02_6F51-ScriptCommandPointers_02_6EB2) ;1
-dw ScriptCodeStorage+(.ScriptCommand_LoadTextEntry_02_6F5D-ScriptCommandPointers_02_6EB2) ;2
-dw ScriptCodeStorage+(.ScriptCommand_LoadVariableTextEntry_02_6F8F-ScriptCommandPointers_02_6EB2) ;3
-dw ScriptCodeStorage+(.ScriptCommand_ForceTextPrintPosition_02_6FCE-ScriptCommandPointers_02_6EB2) ;4
-dw ScriptCodeStorage+(.ScriptCommand_ClearMessageBox_02_6FE9-ScriptCommandPointers_02_6EB2) ;5
-dw ScriptCodeStorage+(.ScriptCommand_Sleep_02_700C-ScriptCommandPointers_02_6EB2) ;6
-dw ScriptCodeStorage+(.ScriptCommand_StoreToVar16Bit_02_7029-ScriptCommandPointers_02_6EB2) ;7
-dw ScriptCodeStorage+(.ScriptCommand_AddToVar16Bit_02_703F-ScriptCommandPointers_02_6EB2) ;8
-dw ScriptCodeStorage+(.ScriptCommand_SubFromVar16Bit_02_7057-ScriptCommandPointers_02_6EB2) ;9
-dw ScriptCodeStorage+(.ScriptCommand_LogicalANDVar_02_706F-ScriptCommandPointers_02_6EB2) ;A
-dw ScriptCodeStorage+(.ScriptCommand_LogicalORVar_02_7087-ScriptCommandPointers_02_6EB2) ;B
-dw ScriptCodeStorage+(.ScriptCommand_LogicalXORVar_02_709F-ScriptCommandPointers_02_6EB2) ;C
-dw ScriptCodeStorage+(.ScriptCommand_LogicalShiftVarRight_02_70B7-ScriptCommandPointers_02_6EB2) ;D
-dw ScriptCodeStorage+(.ScriptCommand_LogicalShiftVarLeft_02_70E5-ScriptCommandPointers_02_6EB2) ;E
-dw ScriptCodeStorage+(.ScriptCommand_MultiplyVariable_02_7110-ScriptCommandPointers_02_6EB2) ;F
-dw ScriptCodeStorage+(.ScriptCommand_MultiplyByVariable_02_7155-ScriptCommandPointers_02_6EB2) ;10
-dw ScriptCodeStorage+(.ScriptCommand_Skip4Bytes_02_719A-ScriptCommandPointers_02_6EB2) ;11
-dw ScriptCodeStorage+(.ScriptCommand_StoreToVarFromVar_02_71A9-ScriptCommandPointers_02_6EB2) ;12
-dw ScriptCodeStorage+(.ScriptCommand_StoreToVar8Bit_02_71E3-ScriptCommandPointers_02_6EB2) ;13
-dw ScriptCodeStorage+(.ScriptCommand_StoreRNGToVar16Bit_02_720C-ScriptCommandPointers_02_6EB2) ;14
-dw ScriptCodeStorage+(.ScriptCommandStoreRNGToVar8Bit_02_723A-ScriptCommandPointers_02_6EB2) ;15
-dw ScriptCodeStorage+(.ScriptCommand_AddToVar8Bit_02_7266-ScriptCommandPointers_02_6EB2) ;16
-dw ScriptCodeStorage+(.ScriptCommand_SubFromVar8Bit_02_7296-ScriptCommandPointers_02_6EB2) ;17
-dw ScriptCodeStorage+(.ScriptCommand_Branch_02_72EA-ScriptCommandPointers_02_6EB2) ;18
-dw ScriptCodeStorage+(.ScriptCommand_LoadScriptEntry_02_72FE-ScriptCommandPointers_02_6EB2) ;19
-dw ScriptCodeStorage+(.ScriptCommand_LoadScriptEntryWithTransition_02_7322-ScriptCommandPointers_02_6EB2) ;1A
-dw ScriptCodeStorage+(.ScriptCommand_3DecisionBranches_02_7346-ScriptCommandPointers_02_6EB2) ;1B
-dw ScriptCodeStorage+(.ScriptCommand_4DecisionBranches_02_736F-ScriptCommandPointers_02_6EB2) ;1C
-dw ScriptCodeStorage+(.ScriptCommand_5DecisionBranches_02_739C-ScriptCommandPointers_02_6EB2) ;1D
-dw ScriptCodeStorage+(.ScriptCommand_6DecisionBranches_02_73C9-ScriptCommandPointers_02_6EB2) ;1E
-dw ScriptCodeStorage+(.ScriptCommand_VariableCompare_02_73F6-ScriptCommandPointers_02_6EB2) ;1F
-dw ScriptCodeStorage+(.ScriptCommand_Compare_8BitVarVsVal_Equal_02_7436-ScriptCommandPointers_02_6EB2) ;20
-dw ScriptCodeStorage+(.ScriptCommand_Compare_8BitVarVsVal_Greater_02_746A-ScriptCommandPointers_02_6EB2) ;21
-dw ScriptCodeStorage+(.ScriptCommand_Compare_8BitVarVsVal_Less_02_749E-ScriptCommandPointers_02_6EB2) ;22
-dw ScriptCodeStorage+(.ScriptCommand_Compare_16BitVarVsVar_Equal_02_74D4-ScriptCommandPointers_02_6EB2) ;23
-dw ScriptCodeStorage+(.ScriptCommand_Compare_16BitVarVsVar_Greater_02_7520-ScriptCommandPointers_02_6EB2) ;24
-dw ScriptCodeStorage+(.ScriptCommand_Compare_16BitVarVsVar_Less_02_756E-ScriptCommandPointers_02_6EB2) ;25
-dw ScriptCodeStorage+(.ScriptCommand_SuperGameBoyBranch_02_75C0-ScriptCommandPointers_02_6EB2) ;26
-dw ScriptCodeStorage+(.ScriptCommand_PlayerStrengthBranch_02_75E0-ScriptCommandPointers_02_6EB2) ;27
-dw ScriptCodeStorage+(.ScriptCommand_ExecuteSubscript_02_7665-ScriptCommandPointers_02_6EB2) ;28
-dw ScriptCodeStorage+(.ScriptCommand_Skip2Bytes_02_7685-ScriptCommandPointers_02_6EB2) ;29
-dw ScriptCodeStorage+(.ScriptCommand_EndSubscript_02_7692-ScriptCommandPointers_02_6EB2) ;2A
-dw ScriptCodeStorage+(.ScriptCommand_DoNothing_02_76A2-ScriptCommandPointers_02_6EB2) ;2B
-dw ScriptCodeStorage+(.ScriptCommand_PlayMusic_02_76A9-ScriptCommandPointers_02_6EB2) ;2C
-dw ScriptCodeStorage+(.ScriptCommand_PlaySFX_02_76C3-ScriptCommandPointers_02_6EB2) ;2D
-dw ScriptCodeStorage+(.ScriptCommand_VariableSceneFadeIn_02_76DD-ScriptCommandPointers_02_6EB2) ;2E
-dw ScriptCodeStorage+(.ScriptCommand_SceneFadeIn_02_771B-ScriptCommandPointers_02_6EB2) ;2F
-dw ScriptCodeStorage+(.ScriptCommand_VariableSceneFadeOut_02_772B-ScriptCommandPointers_02_6EB2) ;30
-dw ScriptCodeStorage+(.ScriptCommand_SceneFadeOut_02_7769-ScriptCommandPointers_02_6EB2) ;31
-dw ScriptCodeStorage+(.ScriptCommand_LoadBackground_02_7779-ScriptCommandPointers_02_6EB2) ;32
-dw ScriptCodeStorage+(.ScriptCommand_LoadBackgroundAlt_02_779F-ScriptCommandPointers_02_6EB2) ;33
-dw ScriptCodeStorage+(.ScriptCommand_UpdateCameraPosition_02_77C5-ScriptCommandPointers_02_6EB2) ;34
-dw ScriptCodeStorage+(.ScriptCommand_VariableLoadCharacter_02_77FC-ScriptCommandPointers_02_6EB2) ;35
-dw ScriptCodeStorage+(.ScriptCommand_FixedLoadCharacter_02_7833-ScriptCommandPointers_02_6EB2) ;36
-dw ScriptCodeStorage+(.ScriptCommand_SetCharExpression_Normal_02_7877-ScriptCommandPointers_02_6EB2) ;37
-dw ScriptCodeStorage+(.ScriptCommand_SetCharExpression_Upset_02_7882-ScriptCommandPointers_02_6EB2) ;38
-dw ScriptCodeStorage+(.ScriptCommand_SetCharExpression_Happy_02_788E-ScriptCommandPointers_02_6EB2) ;39
-dw ScriptCodeStorage+(.ScriptCommand_SetCharExpression_Blush_02_789A-ScriptCommandPointers_02_6EB2) ;3A
-dw ScriptCodeStorage+(.ScriptCommand_SetCharExpression_Sad_02_78A6-ScriptCommandPointers_02_6EB2) ;3B
-dw ScriptCodeStorage+(.ScriptCommand_SetCharCoordinates_02_78B2-ScriptCommandPointers_02_6EB2) ;3C
-dw ScriptCodeStorage+(.ScriptCommand_FlipCharacter_02_78E9-ScriptCommandPointers_02_6EB2) ;3D
-dw ScriptCodeStorage+(.ScriptCommand_ShowOrRemoveCharacter_02_792F-ScriptCommandPointers_02_6EB2) ;3E
-dw ScriptCodeStorage+(.ScriptCommand_ShowCharacter_02_7958-ScriptCommandPointers_02_6EB2) ;3F
-dw ScriptCodeStorage+(.ScriptCommand_RemoveCharacter_02_7967-ScriptCommandPointers_02_6EB2) ;40
-dw ScriptCodeStorage+(.ScriptCommand_ClearLinesOfTiles_02_7978-ScriptCommandPointers_02_6EB2) ;41
-dw ScriptCodeStorage+(.ScriptCommand_ChangeMessagePrinting_02_79DE-ScriptCommandPointers_02_6EB2) ;42
-dw ScriptCodeStorage+(.ScriptCommand_EnablePlayerChoice_2Options_02_7A3E-ScriptCommandPointers_02_6EB2) ;43
-dw ScriptCodeStorage+(.ScriptCommand_EnablePlayerChoice_3Options_02_7A77-ScriptCommandPointers_02_6EB2) ;44
-dw ScriptCodeStorage+(.ScriptCommand_InviteCharacterForADate_02_7AB0-ScriptCommandPointers_02_6EB2) ;45
-dw ScriptCodeStorage+(.ScriptCommand_AffectRelationshipByGift_02_7ADA-ScriptCommandPointers_02_6EB2) ;46
-dw ScriptCodeStorage+(.ScriptCommand_Print8BitVariableValue_02_7B20-ScriptCommandPointers_02_6EB2) ;47
-dw ScriptCodeStorage+(.ScriptCommand_Print16BitVariableValue_02_7B6A-ScriptCommandPointers_02_6EB2) ;48
-dw ScriptCodeStorage+(.ScriptCommand_SeedRNG_02_7BB4-ScriptCommandPointers_02_6EB2) ;49 seed RNG?
-dw ScriptCodeStorage+(.ScriptCommand_DebugSingleVariableEditor_02_7BDB-ScriptCommandPointers_02_6EB2) ;4A
-dw ScriptCodeStorage+(.ScriptCommand_DebugVariableEditorAndViewer_02_7CEE-ScriptCommandPointers_02_6EB2) ;4B
+LOAD "Scripting Code in RAM",WRAM0[ScriptCodeStorage]
+ScriptCommandPointersInRAM:
+dw .ScriptCommand_EndScript_02_6F4A ;0
+dw .ScriptCommand_MakeTextSkippable_02_6F51 ;1
+dw .ScriptCommand_LoadTextEntry_02_6F5D ;2
+dw .ScriptCommand_LoadVariableTextEntry_02_6F8F ;3
+dw .ScriptCommand_ForceTextPrintPosition_02_6FCE ;4
+dw .ScriptCommand_ClearMessageBox_02_6FE9 ;5
+dw .ScriptCommand_Sleep_02_700C ;6
+dw .ScriptCommand_StoreToVar16Bit_02_7029 ;7
+dw .ScriptCommand_AddToVar16Bit_02_703F ;8
+dw .ScriptCommand_SubFromVar16Bit_02_7057 ;9
+dw .ScriptCommand_LogicalANDVar_02_706F ;A
+dw .ScriptCommand_LogicalORVar_02_7087 ;B
+dw .ScriptCommand_LogicalXORVar_02_709F ;C
+dw .ScriptCommand_LogicalShiftVarRight_02_70B7 ;D
+dw .ScriptCommand_LogicalShiftVarLeft_02_70E5 ;E
+dw .ScriptCommand_MultiplyVariable_02_7110 ;F
+dw .ScriptCommand_MultiplyByVariable_02_7155 ;10
+dw .ScriptCommand_Skip4Bytes_02_719A ;11
+dw .ScriptCommand_StoreToVarFromVar_02_71A9 ;12
+dw .ScriptCommand_StoreToVar8Bit_02_71E3 ;13
+dw .ScriptCommand_StoreRNGToVar16Bit_02_720C ;14
+dw .ScriptCommandStoreRNGToVar8Bit_02_723A ;15
+dw .ScriptCommand_AddToVar8Bit_02_7266 ;16
+dw .ScriptCommand_SubFromVar8Bit_02_7296 ;17
+dw .ScriptCommand_Branch_02_72EA ;18
+dw .ScriptCommand_LoadScriptEntry_02_72FE ;19
+dw .ScriptCommand_LoadScriptEntryWithTransition_02_7322 ;1A
+dw .ScriptCommand_3DecisionBranches_02_7346 ;1B
+dw .ScriptCommand_4DecisionBranches_02_736F ;1C
+dw .ScriptCommand_5DecisionBranches_02_739C ;1D
+dw .ScriptCommand_6DecisionBranches_02_73C9 ;1E
+dw .ScriptCommand_VariableCompare_02_73F6 ;1F
+dw .ScriptCommand_Compare_8BitVarVsVal_Equal_02_7436 ;20
+dw .ScriptCommand_Compare_8BitVarVsVal_Greater_02_746A ;21
+dw .ScriptCommand_Compare_8BitVarVsVal_Less_02_749E ;22
+dw .ScriptCommand_Compare_16BitVarVsVar_Equal_02_74D4 ;23
+dw .ScriptCommand_Compare_16BitVarVsVar_Greater_02_7520 ;24
+dw .ScriptCommand_Compare_16BitVarVsVar_Less_02_756E ;25
+dw .ScriptCommand_SuperGameBoyBranch_02_75C0 ;26
+dw .ScriptCommand_PlayerStrengthBranch_02_75E0 ;27
+dw .ScriptCommand_ExecuteSubscript_02_7665 ;28
+dw .ScriptCommand_Skip2Bytes_02_7685 ;29
+dw .ScriptCommand_EndSubscript_02_7692 ;2A
+dw .ScriptCommand_DoNothing_02_76A2 ;2B
+dw .ScriptCommand_PlayMusic_02_76A9 ;2C
+dw .ScriptCommand_PlaySFX_02_76C3 ;2D
+dw .ScriptCommand_VariableSceneFadeIn_02_76DD ;2E
+dw .ScriptCommand_SceneFadeIn_02_771B ;2F
+dw .ScriptCommand_VariableSceneFadeOut_02_772B ;30
+dw .ScriptCommand_SceneFadeOut_02_7769 ;31
+dw .ScriptCommand_LoadBackground_02_7779 ;32
+dw .ScriptCommand_LoadBackgroundAlt_02_779F ;33
+dw .ScriptCommand_UpdateCameraPosition_02_77C5 ;34
+dw .ScriptCommand_VariableLoadCharacter_02_77FC ;35
+dw .ScriptCommand_FixedLoadCharacter_02_7833 ;36
+dw .ScriptCommand_SetCharExpression_Normal_02_7877 ;37
+dw .ScriptCommand_SetCharExpression_Upset_02_7882 ;38
+dw .ScriptCommand_SetCharExpression_Happy_02_788E ;39
+dw .ScriptCommand_SetCharExpression_Blush_02_789A ;3A
+dw .ScriptCommand_SetCharExpression_Sad_02_78A6 ;3B
+dw .ScriptCommand_SetCharCoordinates_02_78B2 ;3C
+dw .ScriptCommand_FlipCharacter_02_78E9 ;3D
+dw .ScriptCommand_ShowOrRemoveCharacter_02_792F ;3E
+dw .ScriptCommand_ShowCharacter_02_7958 ;3F
+dw .ScriptCommand_RemoveCharacter_02_7967 ;40
+dw .ScriptCommand_ClearLinesOfTiles_02_7978 ;41
+dw .ScriptCommand_ChangeMessagePrinting_02_79DE ;42
+dw .ScriptCommand_EnablePlayerChoice_2Options_02_7A3E ;43
+dw .ScriptCommand_EnablePlayerChoice_3Options_02_7A77 ;44
+dw .ScriptCommand_InviteCharacterForADate_02_7AB0 ;45
+dw .ScriptCommand_AffectRelationshipByGift_02_7ADA ;46
+dw .ScriptCommand_Print8BitVariableValue_02_7B20 ;47
+dw .ScriptCommand_Print16BitVariableValue_02_7B6A ;48
+dw .ScriptCommand_SeedRNG_02_7BB4 ;49 seed RNG?
+dw .ScriptCommand_DebugSingleVariableEditor_02_7BDB ;4A
+dw .ScriptCommand_DebugVariableEditorAndViewer_02_7CEE ;4B
 
 ;EndScript
 .ScriptCommand_EndScript_02_6F4A:
@@ -548,7 +552,7 @@ INC HL
 INC HL
 PUSH HL
 
-CALL ScriptCodeStorage+(.SetupVarAnd16BitValue_02_72C5-ScriptCommandPointers_02_6EB2)
+CALL .SetupVarAnd16BitValue_02_72C5
 
 LD A, L
 LD [DE], A
@@ -573,7 +577,7 @@ INC HL
 INC HL
 PUSH HL
 
-CALL ScriptCodeStorage+(.SetupVarAnd16BitValue_02_72C5-ScriptCommandPointers_02_6EB2)
+CALL .SetupVarAnd16BitValue_02_72C5
 
 LD A, [DE]                                                  ;does not handle overflow
 ADD A, L
@@ -601,7 +605,7 @@ INC HL
 INC HL
 PUSH HL
 
-CALL ScriptCodeStorage+(.SetupVarAnd16BitValue_02_72C5-ScriptCommandPointers_02_6EB2)
+CALL .SetupVarAnd16BitValue_02_72C5
 
 LD A, [DE]                                                  ;does not handle underflow
 SUB L
@@ -629,7 +633,7 @@ INC HL
 INC HL
 PUSH HL
 
-CALL ScriptCodeStorage+(.SetupVarAnd16BitValue_02_72C5-ScriptCommandPointers_02_6EB2)
+CALL .SetupVarAnd16BitValue_02_72C5
 
 LD A, [DE]
 AND L
@@ -657,7 +661,7 @@ INC HL
 INC HL
 PUSH HL
 
-CALL ScriptCodeStorage+(.SetupVarAnd16BitValue_02_72C5-ScriptCommandPointers_02_6EB2)
+CALL .SetupVarAnd16BitValue_02_72C5
 
 LD A, [DE]
 OR L
@@ -684,7 +688,7 @@ INC HL
 INC HL
 PUSH HL
 
-CALL ScriptCodeStorage+(.SetupVarAnd16BitValue_02_72C5-ScriptCommandPointers_02_6EB2)
+CALL .SetupVarAnd16BitValue_02_72C5
 
 LD A, [DE]
 XOR L
@@ -712,7 +716,7 @@ INC HL
 INC HL
 PUSH HL
 
-CALL ScriptCodeStorage+(.SetupVarAnd16BitValue_02_72C5-ScriptCommandPointers_02_6EB2)
+CALL .SetupVarAnd16BitValue_02_72C5
 
 LD A, L
 OR A
@@ -762,7 +766,7 @@ INC HL
 INC HL
 PUSH HL
 
-CALL ScriptCodeStorage+(.SetupVarAnd16BitValue_02_72C5-ScriptCommandPointers_02_6EB2)
+CALL .SetupVarAnd16BitValue_02_72C5
 
 LD A, L
 OR A
@@ -810,7 +814,7 @@ INC HL
 INC HL
 PUSH HL
 
-CALL ScriptCodeStorage+(.SetupVarAnd16BitValue_02_72C5-ScriptCommandPointers_02_6EB2)
+CALL .SetupVarAnd16BitValue_02_72C5
 
 LD A, [DE]
 LD C, A
@@ -892,7 +896,7 @@ INC HL
 INC HL
 PUSH HL
 
-CALL ScriptCodeStorage+(.SetupVarAnd16BitValue_02_72C5-ScriptCommandPointers_02_6EB2)
+CALL .SetupVarAnd16BitValue_02_72C5
 LD A, [DE]
 LD C, A
 INC DE
@@ -1815,6 +1819,7 @@ INC DE
 LD C, E
 LD B, D
 LD E, A
+
 LD D, $00
 SLA E
 RL D
@@ -2094,11 +2099,11 @@ LD B, D
 ADD HL, HL
 
 LD A, L
-ADD A, LOW(ScriptCodeStorage+(.POINTERS_02_7650-ScriptCommandPointers_02_6EB2))
+ADD A, LOW(.POINTERS_02_7650)
 LD L, A
 
 LD A, H
-ADC A, HIGH(ScriptCodeStorage+(.POINTERS_02_7650-ScriptCommandPointers_02_6EB2))
+ADC A, HIGH(.POINTERS_02_7650)
 LD H, A
 
 LD A, [HL+]                                                 ;get pointer
@@ -2171,9 +2176,9 @@ LD D, [HL]                                                  ;
 RET
 
 .POINTERS_02_7650:
-dw ScriptCodeStorage+(.DATA_02_7656-ScriptCommandPointers_02_6EB2)
-dw ScriptCodeStorage+(.DATA_02_765B-ScriptCommandPointers_02_6EB2)
-dw ScriptCodeStorage+(.DATA_02_7660-ScriptCommandPointers_02_6EB2)
+dw .DATA_02_7656
+dw .DATA_02_765B
+dw .DATA_02_7660
 
 .DATA_02_7656:
 db $00,$3F,$7F,$BF,$FF ;easy
@@ -3428,18 +3433,23 @@ CALL WaitForVBlank_00_0382
 
 LD A, [JoypadInputPress]
 BitTest JoypadInput_A, A
-JP NZ, ScriptCodeStorage+(.CODE_02_7C7A-ScriptCommandPointers_02_6EB2)
+JP NZ, .CODE_02_7C7A
+
 BitTest JoypadInput_B, A
-JP NZ, ScriptCodeStorage+(.CODE_02_7C7A-ScriptCommandPointers_02_6EB2)
+JP NZ, .CODE_02_7C7A
+
 BitTest JoypadInput_Up, A
 JR NZ, .CODE_02_7C16
+
 BitTest JoypadInput_Down, A
 JR NZ, .CODE_02_7C2B
+
 BitTest JoypadInput_Left, A
 JR NZ, .CODE_02_7C60
+
 BitTest JoypadInput_Right, A
 JR NZ, .CODE_02_7C6D
-JP ScriptCodeStorage+(.CODE_02_7C7C-ScriptCommandPointers_02_6EB2)
+JP .CODE_02_7C7C
 
 .CODE_02_7C16:
 LD A, [$C185]
@@ -3447,10 +3457,11 @@ SLA A
 LD L, A
 LD H, $00
 LD A, L
-ADD A, LOW(ScriptCodeStorage+(.DATA_02_7CE4-ScriptCommandPointers_02_6EB2))
+ADD A, LOW(.DATA_02_7CE4)
 LD L, A
+
 LD A, H
-ADC A, HIGH(ScriptCodeStorage+(.DATA_02_7CE4-ScriptCommandPointers_02_6EB2))
+ADC A, HIGH(.DATA_02_7CE4)
 LD H, A
 LD A, [HL+]
 LD E, A
@@ -3464,11 +3475,11 @@ LD L, A
 LD H, $00
 
 LD A, L
-ADD A, LOW(ScriptCodeStorage+(.DATA_02_7CE4-ScriptCommandPointers_02_6EB2))
+ADD A, LOW(.DATA_02_7CE4)
 LD L, A
 
 LD A, H
-ADC A, HIGH(ScriptCodeStorage+(.DATA_02_7CE4-ScriptCommandPointers_02_6EB2))
+ADC A, HIGH(.DATA_02_7CE4)
 LD H, A
 
 LD A, [HL+]
@@ -3594,7 +3605,7 @@ LD H, A
 
 LD A, BGTile_DownArrow
 CALL DrawOneBGTile_00_0C8C
-JP ScriptCodeStorage+(.CODE_02_7BF3-ScriptCommandPointers_02_6EB2) 
+JP .CODE_02_7BF3 
 
 .CODE_02_7CDF:
 CALL WaitForVBlank_00_0382                                  ;
@@ -3634,10 +3645,10 @@ CALL WaitForVBlank_00_0382
 
 LD A, [JoypadInputPress]
 BitTest JoypadInput_A, A                                    ;if pressed either A...
-JP NZ, ScriptCodeStorage+(.CODE_02_7D9C-ScriptCommandPointers_02_6EB2)
+JP NZ, .CODE_02_7D9C
  
 BitTest JoypadInput_B, A                                    ;or B, quit debugging
-JP NZ, ScriptCodeStorage+(.CODE_02_7D9C-ScriptCommandPointers_02_6EB2)
+JP NZ, .CODE_02_7D9C
 
 BitTest JoypadInput_Up, A
 JR NZ, .PressedUp_02_7D29
@@ -3650,7 +3661,7 @@ JR NZ, .CODE_02_7D82
 
 BitTest JoypadInput_Right, A
 JR NZ, .CODE_02_7D8F
-JP ScriptCodeStorage+(.CODE_02_7D9F-ScriptCommandPointers_02_6EB2)
+JP .CODE_02_7D9F
 
 .PressedUp_02_7D29:
 LD A, [$C185]
@@ -3659,11 +3670,11 @@ LD L, A
 LD H, $00
 
 LD A, L
-ADD A, LOW(ScriptCodeStorage+(.DATA_02_7E32-ScriptCommandPointers_02_6EB2))
+ADD A, LOW(.DATA_02_7E32)
 LD L, A
 
 LD A, H
-ADC A, HIGH(ScriptCodeStorage+(.DATA_02_7E32-ScriptCommandPointers_02_6EB2))
+ADC A, HIGH(.DATA_02_7E32)
 LD H, A
 
 LD A, [HL+]
@@ -3678,11 +3689,11 @@ LD L, A
 LD H, $00
 
 LD A, L
-ADD A, LOW(ScriptCodeStorage+(.DATA_02_7E32-ScriptCommandPointers_02_6EB2))
+ADD A, LOW(.DATA_02_7E32)
 LD L, A
 
 LD A, H
-ADC A, HIGH(ScriptCodeStorage+(.DATA_02_7E32-ScriptCommandPointers_02_6EB2))
+ADC A, HIGH(.DATA_02_7E32)
 LD H, A
 
 LD A, [HL+]
@@ -3752,7 +3763,7 @@ LD [HL], $07
 JR .CODE_02_7D9F
 
 .CODE_02_7D9C:
-JP ScriptCodeStorage+(.CODE_02_7E2D-ScriptCommandPointers_02_6EB2)
+JP .CODE_02_7E2D
 
 .CODE_02_7D9F:
 LD A, [$C184]
@@ -3852,7 +3863,7 @@ LD H, A
 
 LD A, BGTile_DownArrow
 CALL DrawOneBGTile_00_0C8C
-JP ScriptCodeStorage+(.LOOP_02_7D06-ScriptCommandPointers_02_6EB2)  
+JP .LOOP_02_7D06  
 
 .CODE_02_7E2D:
 CALL WaitForVBlank_00_0382
@@ -3868,4 +3879,5 @@ dw 10000
 dw 1
 dw 10
 dw 100
+ENDL
 .end

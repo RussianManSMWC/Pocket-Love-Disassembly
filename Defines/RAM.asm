@@ -12,7 +12,7 @@ def SoundQueue = $C0A3
 def SuperGameBoyFlag = $C0A4                                ;if set, indicates that the game is played via Super Game Boy
 def VBlankHitFlag = $C0A5                                   ;indicates that we have gone through vblank
 def FrameCounter8Bit = $C0A6
-def InterruptDisablerMirror = $C0A7                         ;only used in LCD disable routine to preserve interrupts
+def InterruptEnablerMirror = $C0A7                          ;only used in LCD disable routine to preserve interrupts
 def JoypadInputEnabler = $C0A8                              ;non-zero - inputs enabled
 
 def ScriptEntryID = $C0B0                                   ;script ID that gets executed ($FFFF - event pool end)
@@ -201,6 +201,10 @@ def ChangedSelectionPageFlag = $D233
 def CurrentSelectionPage = $D234
 def CurrentSelectionPageOption = $D235                      ;selected option on current page
 
+def CurrentItemPositionInList = $D22F                       ;temporary variable, for printing item name at appropriate location
+def CurrentItemID = $D231                                   ;temporary variable, used for item name display
+def ItemCountOnCurrentPage = $D235                          ;used for shop item display
+
 def DatePlanner_DayCount = $D234                            ;used to look ahead for offdays where you can schedule a date with someone
 
 def DatePlanner_EarlyOrLateDayChoice = $D234
@@ -290,7 +294,7 @@ def CurrentDayBackup = $D2D5                                ;backs up currently 
 def PlayerInventoryItemAmount = $D2D6                       ;a tally of items the player has
 def InventoryObtainedItemsMaxPages = $D2D7
 
-def UnobtainedItemCount = $D2D8
+def UnobtainedItemCount = $D2D8                             ;calculated when checking contents of player inventory and shop
 def InventoryUnobtainedItemsMaxPages = $D2D9
 
 def DateSpotAmount = $D2D6
@@ -301,7 +305,7 @@ def SaveFileUnusedFlag = $D2DA                              ;3 bytes for each re
 def CurrentItemDisplayArray = $D2DA                         ;5 bytes
 
 def SelectedCharacterForDateOrGift = $D2E0
-def SelectedDateDaySlot = $D2E1
+def SelectedDateDaySlot = $D2E1                             ;contains day value the date happens on
 def SelectedDateDayTime = $D2E2                             ;does it happen early or later in the day?
 
 def CurrentlyChosenGift = $D2E3
@@ -345,7 +349,7 @@ def CurrentSave_SmartStat = $D35D                           ;
 def CurrentSave_FitStat = $D35F                             ;strength, "ability", power?
 def CurrentSave_StyleStat = $D361                           ;
 def CurrentSave_SkillStat = $D363                           ;
-def CurrentSave_SenseStat = $D365                           ;this one is a clear cut due to using kanji for a loan word.
+def CurrentSave_SenseStat = $D365                           ;this one is a clear cut due to using katakana for a loan word.
 def CurrentSave_EnergyStat = $D367                          ;alternatively "health"
 def CurrentSave_AttitudeStat = $D369                        ;a hidden stat. set when starting the game, decreases when missing a date, checked in scripts. you can never improve this stat.
 def CurrentSave_Cash = $D36B                                ;

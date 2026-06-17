@@ -180,7 +180,6 @@ dw $9942
 db 5
 db 2
 db "おさんぽ "
-
 db "おしゃべり"
 
 CharacterProfile_PhoneNumber_Yumi_1E_5084:
@@ -316,7 +315,6 @@ dw $9942
 db 8
 db 2
 db "どくしょ    "
-
 db "くうそうすること"
 
 CharacterProfile_PhoneNumber_Suzune_1E_51AF:

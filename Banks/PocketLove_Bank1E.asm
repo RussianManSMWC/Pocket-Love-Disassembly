@@ -60,7 +60,7 @@ include "Data/Tilemaps/Map/ShoppingCenterStrings.asm"
 
 TilemapClearData_InventoryContents_1E_476B:
 dw $9882
-db 17
+db ItemName_MaxLength
 db 10
 
 include "Data/Tilemaps/Map/ShoppingCenter_BuyingItemStrings.asm"
@@ -71,11 +71,7 @@ include "Data/Tilemaps/PhoneCall/DateProposalMessages.asm"
 include "Data/Tilemaps/PhoneCall/CharacterSpeakingTilemapPositions.asm"
 include "Data/Tilemaps/PhoneCall/DatePlanner.asm"
 
-AButtonPrompt_1E_48F5:
-dw $9A06
-db 6
-db 1
-db "A=けってい"
+include "Data/Tilemaps/PhoneCall/AButtonPrompt.asm"
 
 include "Data/Tilemaps/PhoneCall/DatePickedTimeMessages.asm"
 include "Data/Tilemaps/PhoneCall/DatePickedPlaceMessages.asm"
@@ -246,24 +242,7 @@ db $03
 ds 8, $05
 db $08
 
-AAndBPromptStacked_1E_4ECC:
-dw $99ED
-db 6
-db 2
-db "A=けってい"
-db "B=とりけし"
-
-AAndBPrompt_1E_4EDC:
-dw $9A07
-db 12
-db 1
-db "A=けっていB=とりけし"
-
-AAndBPromptWindow_1E_4EEC:
-dw $9D06
-db 13
-db 1
-db "A=けってい B=とりけし"
+include "Data/Tilemaps/AAndBPrompts_1E.asm"
 
 include "Data/Text/ClubNames.asm"
 
@@ -379,70 +358,70 @@ db $09,$19
 
 ;item name positions in player's inventory
 ItemNameStringPositionPointers_1E_58DC:
-dw DATA_1E_58F4
-dw DATA_1E_58F8
-dw DATA_1E_58FC
-dw DATA_1E_5900
-dw DATA_1E_5904
+dw ItenNameStringPos_FirstItem_1E_58F4
+dw ItenNameStringPos_SecondItem_1E_58F8
+dw ItenNameStringPos_ThirdItem_1E_58FC
+dw ItenNameStringPos_FourthItem_1E_5900
+dw ItenNameStringPos_FifthItem_1E_5904
 
 ItemPriceStringPositionPointers_1E_58E6:
-dw DATA_1E_5908
-dw DATA_1E_590C
-dw DATA_1E_5910
-dw DATA_1E_5914
-dw DATA_1E_5918
+dw ItemPriceStringPos_FirstItem_1E_5908
+dw ItemPriceStringPos_SecondItem_1E_590C
+dw ItemPriceStringPos_ThirdItem_1E_5910
+dw ItemPriceStringPos_FourthItem_1E_5914
+dw ItemPriceStringPos_FifthItem_1E_5918
 
 ;unused tilemap data
 dw $9853
 db 6
 db 1
 
-DATA_1E_58F4:
+ItenNameStringPos_FirstItem_1E_58F4:
 dw $9882
 db ItemName_MaxLength
 db 1
 
-DATA_1E_58F8:
+ItenNameStringPos_SecondItem_1E_58F8:
 dw $98C2
 db ItemName_MaxLength
 db 1
 
-DATA_1E_58FC:
+ItenNameStringPos_ThirdItem_1E_58FC:
 dw $9902
 db ItemName_MaxLength
 db 1
 
-DATA_1E_5900:
+ItenNameStringPos_FourthItem_1E_5900:
 dw $9942
 db ItemName_MaxLength
 db 1
 
-DATA_1E_5904:
+ItenNameStringPos_FifthItem_1E_5904:
 dw $9982
 db ItemName_MaxLength
 db 1
 
-DATA_1E_5908:
+ItemPriceStringPos_FirstItem_1E_5908:
 dw $98A2
 db 6
 db 1
 
-DATA_1E_590C:
+ItemPriceStringPos_SecondItem_1E_590C:
 dw $98E2
 db 6
 db 1
 
-DATA_1E_5910:
+ItemPriceStringPos_ThirdItem_1E_5910:
 dw $9922
 db 6
 db 1
 
-DATA_1E_5914:
+ItemPriceStringPos_FourthItem_1E_5914:
 dw $9962
 db 6
 db 1
 
-DATA_1E_5918:
+ItemPriceStringPos_FifthItem_1E_5918:
 dw $99A2
 db 6
 db 1
@@ -1140,7 +1119,7 @@ LD B, 8                                                     ;each byte is 8 bits
 
 LOOP_1E_684D:
 SRL C                                                       ;bit test
-JR C, CODE_1E_685B                                          ;if bit is clear, item is in player's posession
+JR C, CODE_1E_685B                                          ;if bit is set, item is in player's posession
 
 LD A, [UnobtainedItemCount]                                 ;
 INC A                                                       ;amount of items not in player's inventory
@@ -1387,7 +1366,7 @@ LD A, [HL]                                                  ;
 ADD A, C                                                    ;
 JR NC, CODE_1E_697E                                         ;check if about to overflow
 
-LD A, 255                                                  ;cap
+LD A, 255                                                   ;cap
 
 CODE_1E_697E:
 LD [HL], A                                                  ;
@@ -1588,7 +1567,7 @@ JR Z, CODE_1E_6A7D                                          ;
 CP ClubOrJob_BasketballClub                                 ;
 JR Z, CODE_1E_6A7D                                          ;
 CP ClubOrJob_SoccerClub                                     ;
-RET NZ                                                      ;return if not in any club
+RET NZ                                                      ;return if not in any sports club
 
 CODE_1E_6A7D:
 SUB ClubOrJob_BaseballClub                                  ;
@@ -1688,7 +1667,7 @@ LD A, [CurrentDateSpot_Miri]                                ;
 CP MapSpot_School                                           ;
 JR NZ, RETURN_1E_6B0E                                       ;only school invite works
 
-LD A, [CurrentSave_CurrentTimeOfDay]                        ;must be at the morning
+LD A, [CurrentSave_CurrentTimeOfDay]                        ;must be in the morning
 CP $00                                                      ;
 JR NZ, RETURN_1E_6B0E                                       ;
 
@@ -1868,7 +1847,7 @@ CODE_1E_6BD4:
 LD HL, CurrentSave_PlannedDatesArray                        ;
 LD B, 10                                                    ;
 
-CODE_1E_6BD9:
+LOOP_1E_6BD9:
 LD A, [HL]                                                  ;date occupied?
 CP $FF                                                      ;
 JR Z, CODE_1E_6C2D                                          ;
@@ -1943,7 +1922,8 @@ CODE_1E_6C2D:
 LD DE, $0006                                                ;next slot
 ADD HL, DE                                                  ;
 DEC B                                                       ;
-JR NZ, CODE_1E_6BD9                                         ;
+JR NZ, LOOP_1E_6BD9                                         ;
+
 XOR A                                                       ;
 RET                                                         ;
 
@@ -2161,7 +2141,7 @@ ADD HL, BC                                                  ;
 LD E, [HL]                                                  ;get save RAM position
 INC HL                                                      ;
 LD D, [HL]                                                  ;
-LD BC, SaveFileSize
+LD BC, SaveFileSize                                         ;
 
 XOR A                                                       ;
 LD [SaveFileChecksum], A                                    ;
@@ -2287,7 +2267,7 @@ LD [CurrentSave_ScheduledActivities+6], A                   ;
 LD [CurrentSave_ScheduledActivities+13], A                  ;
 
 XOR A                                                       ;
-LD [$D245], A
+LD [ScheduleScreen_CurrentSelectionIndex], A                ;
 JP CancelLastScheduleSelection_1E_6ECE                      ;
 
 DrawOffDayScheduleMessage_1E_6DFA:
@@ -2424,7 +2404,7 @@ LD A, [ScheduleScreen_CurrentSelectionIndex]                ;
 CP $07                                                      ;
 JR C, CODE_1E_6EB8                                          ;
 
-LD A, $30                                                   ;
+LD A, $30                                                   ;place selector sprite lower (later day activities row)
 JR CODE_1E_6EBA                                             ;
 
 CODE_1E_6EB8:
@@ -2539,13 +2519,13 @@ LD HL, IconBaseTilemapData_EarlyDay_1E_6FCA                 ;
 CALL StoreTilemapLocationToRAM_1E_7333                      ;
 
 LD HL, CurrentSave_ScheduledActivities                      ;
-CALL DrawWorkweekScheduleIcons_6F8B                         ;
+CALL DrawWorkweekScheduleIcons_1E_6F8B                      ;
 
 LD HL, IconBaseTilemapData_LateDay_1E_6FCE                  ;
 CALL StoreTilemapLocationToRAM_1E_7333                      ;
 
 LD HL, CurrentSave_ScheduledActivities+7                    ;activities for the latter half of the day
-JP DrawWorkweekScheduleIcons_6F8B                           ;
+JP DrawWorkweekScheduleIcons_1E_6F8B                        ;
 
 ;off day schedule screen stuffs
 CODE_1E_6F65:
@@ -2565,6 +2545,7 @@ LD C, A                                                     ;
 CALL DrawScheduleIcon_1E_6FA8                               ;
 
 LD HL, IconBaseTilemapData_LateDay_1E_6FCE                  ;
+
 LD A, [CurrentSave_DayOffActivities+1]                      ;
 CP ScheduleOption_None                                      ;
 JR NZ, CODE_1E_6F87                                         ;
@@ -2575,7 +2556,7 @@ CODE_1E_6F87:
 LD C, A                                                     ;
 JP DrawScheduleIcon_1E_6FA8                                 ;
 
-DrawWorkweekScheduleIcons_6F8B:
+DrawWorkweekScheduleIcons_1E_6F8B:
 LD B, 7                                                     ;7 days in a week (this results in drawing "off day" icons out of bounds, since work week is 6 days)
 
 LOOP_1E_6F8D:
@@ -2945,7 +2926,7 @@ INC A                                                       ;
 CP 3                                                        ;
 JR NZ, CODE_1E_718C                                         ;
 
-XOR A                                                       ;wrap-around if going beyond the three opttions
+XOR A                                                       ;wrap-around if going beyond the three options
 
 CODE_1E_718C:
 LD [SelectedOption_Vertical], A                             ;
@@ -3069,7 +3050,7 @@ RET Z                                                       ;nothing happens whe
 LD C, $00                                                   ;
 LD HL, CurrentSave_ScheduledActivities                      ;
 
-CODE_1E_7235:
+LOOP_1E_7235:
 LD A, [HL]                                                  ;check if one of the scheduled activities was.......
 CP ScheduleOption_Club                                      ;
 JR Z, CODE_1E_723E                                          ;club, replace alredy scheduled ones (if applicable)
@@ -3101,7 +3082,7 @@ INC C                                                       ;
 INC HL                                                      ;
 LD A, $0E                                                   ;
 CP C                                                        ;
-JR NZ, CODE_1E_7235                                         ;
+JR NZ, LOOP_1E_7235                                         ;
 RET
 
 DrawClubNameForMessage_1E_725A:
@@ -3218,7 +3199,7 @@ JR CODE_1E_72FC                                             ;
 
 CODE_1E_72F0:
 XOR A                                                       ;have not met this character
-LD [HL+], A
+LD [HL+], A                                                 ;
 
 PUSH HL                                                     ;
 PUSH BC                                                     ;
@@ -3242,7 +3223,7 @@ LD [DE], A                                                  ;
 DEC B                                                       ;
 JR NZ, CODE_1E_72E7                                         ;
 
-LD A, $01
+LD A, $01                                                   ;
 LD [CursorSpriteEnabler], A                                 ;
 RET                                                         ;
 
@@ -3268,7 +3249,7 @@ RET                                                         ;
 
 CharacterNameListTilemapStart_1E_732F:
 dw $9882
-db 8                                                        ;character name length
+db CharacterName_MaxLength
 db 1
 
 ;store 4 bytes from HL into DynamicTilemapArray
@@ -3627,10 +3608,12 @@ LD A, [SelectedOption]                                      ;
 SLA A                                                       ;
 LD C, A                                                     ;
 LD B, $00                                                   ;
+
 PUSH BC                                                     ;
 LD HL, CharacterProfile_FaveThingsPointers_1E_5248          ;
 CALL DrawCharacterProfileInfo_1E_75A1                       ;
 POP BC                                                      ;
+
 LD HL, CharacterProfile_FavePlacesPointers_1E_5256          ;
 JP DrawCharacterProfileInfo_1E_75A1                         ;
 
@@ -3686,14 +3669,17 @@ LD A, [SelectedOption]                                      ;
 SLA A                                                       ;
 LD C, A                                                     ;
 LD B, $00                                                   ;
+
 PUSH BC                                                     ;
 LD HL, CharacterProfile_NamePointers_1E_521E                ;
 CALL DrawCharacterProfileInfo_1E_75A1                       ;
 POP BC                                                      ;
+
 PUSH BC                                                     ;
 LD HL, CharacterProfile_BirthdatePointers_1E_522C           ;
 CALL DrawCharacterProfileInfo_1E_75A1                       ;
 POP BC                                                      ;
+
 LD HL, CharacterProfile_BloodtypePointers_1E_523A           ;
 CALL DrawCharacterProfileInfo_1E_75A1                       ;
 CALL DrawCharacterProfile_FirstPageInfo_1E_74DF             ;
@@ -3859,6 +3845,7 @@ LD A, [SelectedOption]                                      ;
 INC A                                                       ;
 CP $06                                                      ;
 JR NZ, CODE_1E_7665                                         ;
+
 XOR A                                                       ;
 
 CODE_1E_7665:
@@ -3991,10 +3978,12 @@ JR CODE_1E_7737                                             ;
 PressedDown_1E_7717:
 LD A, SFX_ChangeOption                                      ;
 LD [SoundQueue], A                                          ;
+
 LD A, [DatePlanner_CurrentSlotChoice]                       ;
 INC A                                                       ;
 CP $0A                                                      ;
 JR NZ, CODE_1E_7725                                         ;
+
 XOR A                                                       ;
 
 CODE_1E_7725:
@@ -4047,6 +4036,7 @@ LD A, [DatePlanner_CurrentSlotChoice]                       ;
 LD C, A                                                     ;
 LD B, $00                                                   ;
 ADD HL, BC                                                  ;
+
 LD A, [HL]                                                  ;
 CP $00                                                      ;
 JR NZ, CODE_1E_7787                                         ;
@@ -4056,6 +4046,7 @@ LD A, [DatePlanner_CurrentSlotChoice]                       ;
 LD C, A                                                     ;
 LD B, $00                                                   ;
 ADD HL, BC                                                  ;
+
 LD A, [HL]                                                  ;
 LD [SelectedDateDaySlot], A                                 ;
 
@@ -4065,9 +4056,9 @@ LD [SelectedDateDayTime], A                                 ;
 XOR A                                                       ;
 RET                                                         ;
 
-CODE_1E_7787:                                               ;
+CODE_1E_7787:
 SCF                                                         ;
-RET
+RET                                                         ;
 
 HandleSpotChoiceForInviteScreenFunctionality_1E_7789:
 LD A, [JoypadInputPress]                                    ;
@@ -4108,7 +4099,7 @@ JR CODE_1E_77FF                                             ;
 PressedDown_1E_77BF:
 LD A, [CurrentSelectionPageOption]                          ;
 INC A                                                       ;
-CP 10                                                       ;
+CP $0A                                                      ;
 JR NZ, CODE_1E_77C8                                         ;
 XOR A                                                       ;
 
@@ -4218,6 +4209,7 @@ LD A, 5                                                     ;wrap around cursor
 
 CODE_1E_7857:
 LD [CurrentSelectionPageOption], A                          ;
+
 CALL CheckValidGiftItemSelection_1E_78B7                    ;
 JR C, PressedUp_1E_784D                                     ;
 
@@ -4228,7 +4220,7 @@ JR CODE_1E_78A6                                             ;
 PressedDown_1E_7866:
 LD A, [CurrentSelectionPageOption]                          ;
 INC A                                                       ;
-CP $06
+CP $06                                                      ;
 JR NZ, CODE_1E_786F                                         ;
 
 XOR A                                                       ;
@@ -4614,21 +4606,24 @@ PUSH HL                                                     ;
 LD A, [HL]                                                  ;
 CP $FF                                                      ;
 JR Z, CODE_1E_7A67                                          ;
+
 INC HL                                                      ;
 INC HL                                                      ;
 LD A, [HL]                                                  ;
 CP C                                                        ;
 JR NZ, CODE_1E_7A67                                         ;
 POP HL                                                      ;
-SCF                                                         ;
+
+SCF                                                         ;draw icon
 RET                                                         ;
 
 CODE_1E_7A67:
 POP HL                                                      ;
-LD DE, $0006                                                ;
+LD DE, $0006                                                ;next slot
 ADD HL, DE                                                  ;
 DEC B                                                       ;
 JR NZ, LOOP_1E_7A58                                         ;
+
 XOR A                                                       ;
 RET                                                         ;
 
@@ -4829,13 +4824,13 @@ LD [SaveFileChecksum+1], A                                  ;
 
 XOR A                                                       ;
 
-CODE_1E_7B9F:
+LOOP_1E_7B9F:
 LD [DE], A                                                  ;clear SRAM
 INC DE                                                      ;
 DEC BC                                                      ;
 LD A, C                                                     ;
 OR B                                                        ;
-JR NZ, CODE_1E_7B9F                                         ;
+JR NZ, LOOP_1E_7B9F                                         ;
 
 LD A, $63
 LD [DE], A                                                  ;

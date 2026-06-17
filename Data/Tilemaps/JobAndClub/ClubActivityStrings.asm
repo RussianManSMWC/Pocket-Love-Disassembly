@@ -61,8 +61,7 @@ AppliedToClubMessage_1E_452C:
 dw $9C81
 db 18
 db 1
-db "     ぶ に"
-db " にゅうぶしました。"
+db "     ぶ に にゅうぶしました。"
 
 QuitClubMessage_1E_4542:
 dw $992B

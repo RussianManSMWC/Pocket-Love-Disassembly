@@ -2704,6 +2704,7 @@ db "きっと あと もうすこしで",TextCommand_LineBreak
 db "ぼくたちの こいは はじまる!"
 db TextCommand_End
 
+;Game staff text starts here
 TextData_0D_71CA:
 db TextCommand_ClearMsg,"   ぽけっと•らぶ すたっふ"
 db TextCommand_End
