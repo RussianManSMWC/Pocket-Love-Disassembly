@@ -28,6 +28,13 @@ macro dwb
   db HIGH(\1),LOW(\1)
 endm
 
+;apparently dl used by RGBDS is different than one used by Asar... here it's a 32-bit value, and there it's 24-bit
+;this actually sucks because apparently macros cannot be separated like instructions with ::
+;dl asar
+macro dla
+  dw (\1 & $FFFF) :: db \1 >> 16
+endm
+
 ;define a 16-bit pointer with data size.
 ;input data table. must end with .end label for size calculation
 macro PointerWithSize

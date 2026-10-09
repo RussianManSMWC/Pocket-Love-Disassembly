@@ -66,6 +66,7 @@ JR NZ, LOOP_00_0028                                         ;
 RET                                                         ;
 
 ;the only used section. this is the "CheckPPUModes" command
+;used to detect if the Game Boy is in certain drawing modes. This permits writing to VRAM, even if the write isn't actually intended for VRAM.
 SECTION "rst 30", ROM0[$30]
 LOOP_00_0030:
 LDH A, [Reg_LCDStatus]                                      ;checks if PPU is in "V-blank" or "drawing pixels" modes
@@ -152,16 +153,16 @@ LDH [Reg_CameraYPosition], A                                ;
 
 CALL InitSound_00_0B2D                                      ;
 
-CALL CheckSGB_00_0C95                                       ;
+CALL SGB_CheckHardware_00_0C95                              ;
 JP NC, CODE_00_019A                                         ;if not played on super game boy, skip over
 
 LD A, $01                                                   ;
 LD [SuperGameBoyFlag], A                                    ;playing with super game boy power
 
-CALL SuperGameBoyInit_00_08A7                               ;put new borders and colors on display
+CALL SGB_InitEssentials_00_08A7                             ;load some important stuff and put new borders and colors on display
 
 CODE_00_019A:
-CALL CODE_00_0D24
+CALL SGB_SetGameBoyPalettes_00_0D24                         ;still attempts to load game boy display palettes even if not on super game boy
 
 LD A, LCDControlEnable|LCDBackgroundRender                  ;
 LDH [Reg_LCDControlAndRender], A                            ;
@@ -530,74 +531,81 @@ DEC B                                                       ;
 JR NZ, WaitMultipleVBlanks_00_038E                          ;
 RET                                                         ;
 
-SendSGBPacket_00_0395:
+;input HL - packet table
+SGB_SendPackets_00_0395:
 LD A, [HL]                                                  ;number of packets determined by first 3 bits
 AND $07                                                     ;
 RET Z                                                       ;don't send any packets if 0
 
-LD B, A                                                     ;
-LD C, $00                                                   ;
+LD B, A                                                     ;amount of packets
+LD C, LOW(Reg_JoyPad)                                       ;will be using joypad register as god Nintendo Nintended (see what I did there?)
 
 LOOP_00_039C:
 PUSH BC                                                     ;
-LD A, $00
-LD [$FF00+C], A
 
-LD A, $30
-LD [$FF00+C], A
+LD A, $00                                                   ;start the packet receiving circut
+LD [$FF00+C], A                                             ;
 
-LD B, $10
+LD A, $30                                                   ;set bits 4 and 5
+LD [$FF00+C], A                                             ;
+
+LD B, $10                                                   ;check all 16 bytes of a single packet
 
 LOOP_00_03A5:
-LD E, $08
-LD A, [HL+]
-LD D, A
+LD E, $08                                                   ;read all 8 bits
+LD A, [HL+]                                                 ;read packet byte
+LD D, A                                                     ;will be bit testing
 
 LOOP_00_03A9:
-BIT 0, D
-LD A, $10
-JR NZ, CODE_00_03B1
+BIT 0, D                                                    ;check if bit is set or clear
+LD A, $10                                                   ;bit 4 set - indicates that the tested bit is set
+JR NZ, CODE_00_03B1                                         ;
 
-LD A, $20
+LD A, $20                                                   ;bit 5 set - indicates it was clear
 
 CODE_00_03B1:
-LD [$FF00+C], A
-LD A, $30
-LD [$FF00+C], A
-RR D
-DEC E
-JR NZ, LOOP_00_03A9
+LD [$FF00+C], A                                             ;
 
-DEC B
-JR NZ, LOOP_00_03A5
+LD A, $30                                                   ;send
+LD [$FF00+C], A                                             ;
 
-LD A, $20
-LD [$FF00+C], A
+RR D                                                        ;
+DEC E                                                       ;next bit check
+JR NZ, LOOP_00_03A9                                         ;
 
-LD A, $30
-LD [$FF00+C], A
+DEC B                                                       ;
+JR NZ, LOOP_00_03A5                                         ;
 
-POP BC
-DEC B
-RET Z
+LD A, $20                                                   ;
+LD [$FF00+C], A                                             ;
 
-CALL Wait7000_00_03CB
-JR LOOP_00_039C
+LD A, $30                                                   ;
+LD [$FF00+C], A                                             ;
 
-;time wasting loop
-Wait7000_00_03CB:
-LD DE, 7000                                                 ;
+POP BC                                                      ;
+DEC B                                                       ;quit when all packets done
+RET Z                                                       ;
+
+CALL SGB_Wait4Frames_00_03CB                                ;don't forget to wait for a bit between each packet read
+JR LOOP_00_039C                                             ;next packet
+
+;SGB-specific time wasting code. Apparently, the user can use a "bomb" SGB function to nuke a user-drawn border, which stops the packet reading for a bit.
+;Waits 70006 cycles.
+;This is equivalent to almost 4 Game Boy frames (by my calculation, ~3,99 frames, since 1 cycle = 4 dots and 1 frame is 70224 dots))
+;Unless I am really wrong about Game Boy's timing... but I am certain about cycle count at least.
+SGB_Wait4Frames_00_03CB:
+LD DE, 7000                                                 ;+3 cycles
 
 LOOP_00_03CE:
-NOP                                                         ;
-NOP                                                         ;
-NOP                                                         ;
-DEC DE                                                      ;
+NOP                                                         ;\
+NOP                                                         ;|+3
+NOP                                                         ;/
 
-LD A, D                                                     ;
-OR E                                                        ;
-JR NZ, LOOP_00_03CE                                         ;
-RET                                                         ;
+DEC DE                                                      ;+2
+LD A, D                                                     ;+1
+OR E                                                        ;+1
+JR NZ, LOOP_00_03CE                                         ;+3 for 6999 times, +2 for one time (when DE reaches 0)
+RET                                                         ;+4
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
@@ -1512,163 +1520,225 @@ dw $07D9,$07DB,$07DD,$07DF                                  ;44-47
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;load super game boy related stuff
-SuperGameBoyInit_00_08A7:
-LD HL, DATA_00_0A05
-CALL SendSGBPacket_00_0395
-CALL Wait7000_00_03CB
+SGB_InitEssentials_00_08A7:
+LD HL, SGBPacketData_EnableGameBoyMask_00_0A05              ;mask game boy while doing behind scene stuffs
+CALL SGB_SendPackets_00_0395                                ;
+CALL SGB_Wait4Frames_00_03CB                                ;
 
-LD B, $0F
+LD B, 15                                                    ;
 
 LOOP_00_08B2:
-CALL Wait7000_00_03CB
-DEC B
-JR NZ, LOOP_00_08B2
+CALL SGB_Wait4Frames_00_03CB                                ;wait almost a second
+DEC B                                                       ;
+JR NZ, LOOP_00_08B2                                         ;
 
-LD HL, DATA_00_0965
-CALL SendSGBPacket_00_0395
-CALL Wait7000_00_03CB
+LD HL, SGBPacketData_OBJCode1_00_0965                       ;send some seemingly important code
+CALL SGB_SendPackets_00_0395                                ;
+CALL SGB_Wait4Frames_00_03CB                                ;
 
-LD HL, DATA_00_0975
-CALL SendSGBPacket_00_0395
-CALL Wait7000_00_03CB
+LD HL, SGBPacketData_OBJCode2_00_0975                       ;
+CALL SGB_SendPackets_00_0395                                ;
+CALL SGB_Wait4Frames_00_03CB                                ;
 
-LD HL, DATA_00_0985
-CALL SendSGBPacket_00_0395
-CALL Wait7000_00_03CB
+LD HL, SGBPacketData_OBJCode3_00_0985                       ;
+CALL SGB_SendPackets_00_0395                                ;
+CALL SGB_Wait4Frames_00_03CB                                ;
 
-LD HL, DATA_00_0995
-CALL SendSGBPacket_00_0395
-CALL Wait7000_00_03CB
+LD HL, SGBPacketData_OBJCode4_00_0995                       ;
+CALL SGB_SendPackets_00_0395                                ;
+CALL SGB_Wait4Frames_00_03CB                                ;
 
-LD HL, DATA_00_09A5
-CALL SendSGBPacket_00_0395
-CALL Wait7000_00_03CB
+LD HL, SGBPacketData_OBJCode5_00_09A5                       ;
+CALL SGB_SendPackets_00_0395                                ;
+CALL SGB_Wait4Frames_00_03CB                                ;
 
-LD HL, DATA_00_09B5
-CALL SendSGBPacket_00_0395
-CALL Wait7000_00_03CB
+LD HL, SGBPacketData_OBJCode6_00_09B5                       ;
+CALL SGB_SendPackets_00_0395                                ;
+CALL SGB_Wait4Frames_00_03CB                                ;
 
-LD HL, DATA_00_09C5
-CALL SendSGBPacket_00_0395
-CALL Wait7000_00_03CB
+LD HL, SGBPacketData_OBJCode7_00_09C5                       ;
+CALL SGB_SendPackets_00_0395                                ;
+CALL SGB_Wait4Frames_00_03CB                                ;
 
-LD HL, DATA_00_09D5
-CALL SendSGBPacket_00_0395
-CALL Wait7000_00_03CB
+LD HL, SGBPacketData_OBJCode8_00_09D5                       ;
+CALL SGB_SendPackets_00_0395                                ;
+CALL SGB_Wait4Frames_00_03CB                                ;
 
-LD A, LCDControlEnable|LCDWindowTilemapSelect
-LDH [Reg_LCDControlAndRender], A
+LD A, LCDControlEnable|LCDWindowTilemapSelect               ;
+LDH [Reg_LCDControlAndRender], A                            ;
 
-LD A, [CurrentProgramBank]
-PUSH AF
-LD B, $02
-LD HL, $0008
-CALL GetPointerWithSize_00_0AEC
+LD A, [CurrentProgramBank]                                  ;
+PUSH AF                                                     ;
 
-LD DE, DATA_00_09E5
-CALL CODE_00_0C14
-CALL Wait7000_00_03CB
+LD B, $02                                                   ;
+LD HL, $0008                                                ;get border graphics
+CALL GetPointerWithSize_00_0AEC                             ;
 
-LD B, $02
-LD HL, $0007
-CALL GetPointerWithSize_00_0AEC
+LD DE, SGBPacketData_TransferSNESGFX_00_09E5                ;
+CALL SGB_SendSNESGraphicsData_00_0C14                       ;
+CALL SGB_Wait4Frames_00_03CB                                ;
 
-LD DE, DATA_00_09F5
-CALL CODE_00_0C14
-CALL Wait7000_00_03CB
+LD B, $02                                                   ;
+LD HL, $0007                                                ;get border tilemap and palettes
+CALL GetPointerWithSize_00_0AEC                             ;
 
-POP AF
-CALL SetProgramBank_00_037B
-DI
-CALL DisableLCD_00_0FE0
+LD DE, SGBPacketData_TransferSNESTilemapAndPal_00_09F5      ;
+CALL SGB_SendSNESGraphicsData_00_0C14                       ;send em over to SNES
+CALL SGB_Wait4Frames_00_03CB                                ;
 
-LD H, $20
+POP AF                                                      ;
+CALL SetProgramBank_00_037B                                 ;
+
+DI                                                          ;
+CALL DisableLCD_00_0FE0                                     ;
+
+LD H, 32                                                    ;
 
 LOOP_00_0934:
-LD BC, $1000
+LD BC, 4096                                                 ;more time wasting...
 
 LOOP_00_0937:
-DEC BC
-LD A, B
-OR C
-JR NZ, LOOP_00_0937
+DEC BC                                                      ;
+LD A, B                                                     ;
+OR C                                                        ;
+JR NZ, LOOP_00_0937                                         ;
 
-DEC H
-JR NZ, LOOP_00_0934
+DEC H                                                       ;
+JR NZ, LOOP_00_0934                                         ;wait a while
 
-LD HL, $8000
-LD BC, $2000
-CALL ClearData_00_0C63
+LD HL, $8000                                                ;clean the mess after transferring SGB graphics and tilemap and such
+LD BC, $2000                                                ;
+CALL ClearData_00_0C63                                      ;
 
 LD A, LCDControlEnable|LCDBackgroundRender|LCDSpriteRender|LCDSpriteSize
-LDH [Reg_LCDControlAndRender], A
+LDH [Reg_LCDControlAndRender], A                            ;
 
-XOR A
-LDH [Reg_InterruptRequest], A
+XOR A                                                       ;
+LDH [Reg_InterruptRequest], A                               ;
 
-LD A, Interrupt_VBlank|Interrupt_HBlank
-LDH [Reg_InterruptsEnabler], A
-EI
-CALL Wait7000_00_03CB
+LD A, Interrupt_VBlank|Interrupt_HBlank                     ;
+LDH [Reg_InterruptsEnabler], A                              ;
 
-DI
-CALL DisableLCD_00_0FE0
+EI                                                          ;
+CALL SGB_Wait4Frames_00_03CB                                ;
 
-LD HL, DATA_00_0A15
-CALL SendSGBPacket_00_0395
-CALL Wait7000_00_03CB
-RET
+DI                                                          ;
+CALL DisableLCD_00_0FE0                                     ;
 
-DATA_00_0965:
-db $79,$1B,$08,$00,$0B,$EA,$EA,$EA
-db $EA,$EA,$A9,$01,$CD,$4F,$0C,$D0
+LD HL, SGBPacketData_DisableGameBoyMask_00_0A15             ;show game boy window as normal
+CALL SGB_SendPackets_00_0395                                ;
+CALL SGB_Wait4Frames_00_03CB                                ;
+RET                                                         ;
 
-DATA_00_0975:
-db $79,$26,$08,$00,$0B,$39,$CD,$48
-db $0C,$D0,$34,$A5,$C9,$C9,$80,$D0
+;Some generic SNES code to be copied to SNES RAM. Supposedly some kind of a patch for SNES OAM tiles.
+SGBPacketData_OBJCode1_00_0965:
+db SGBCommand_RAMCopy<<3 | 1
+dla $00081B
+db 11
 
-DATA_00_0985:
-db $79,$31,$08,$00,$0B,$0C,$A5,$CA
-db $C9,$7E,$D0,$06,$A5,$CB,$C9,$7E
+ds 5, $EA                                                   ;NOP #5
+db $A9,$01                                                  ;LDA #$01
+db $CD :: dw $0C4F                                          ;CMP $0C4F
+db $D0                                                      ;BNE ... (continued in the next packet)
 
-DATA_00_0995:
-db $79,$3C,$08,$00,$0B,$F0,$12,$A5
-db $C9,$C9,$C8,$D0,$1C,$A5,$CA,$C9
+SGBPacketData_OBJCode2_00_0975:
+db SGBCommand_RAMCopy<<3 | 1
+dla $000826
+db 11
 
-DATA_00_09A5:
-db $79,$47,$08,$00,$0B,$C4,$D0,$16
-db $A5,$CB,$C9,$05,$D0,$10,$A2,$28
+db $39                                                      ;BNE $39 (continuing from the last packet)
+db $CD :: dw $0C48                                          ;CMP $0C48
+db $D0,$34                                                  ;BNE $34
+db $A5,$C9                                                  ;LDA $C9
+db $C9,$80                                                  ;CMP #$80
+db $D0                                                      ;BNE ... (continued in the next packet)
 
-DATA_00_09B5:
-db $79,$52,$08,$00,$0B,$A9,$E7,$9F
-db $01,$C0,$7E,$E8,$E8,$E8,$E8,$E0
+SGBPacketData_OBJCode3_00_0985:
+db SGBCommand_RAMCopy<<3 | 1
+dla $000831
+db 11
 
-DATA_00_09C5:
-db $79,$5D,$08,$00,$04,$8C,$D0,$F4
-db $60,$00,$00,$00,$00,$00,$00,$00
+db $0C                                                      ;BNE $0C (continuing from the last packet)
+db $A5,$CA                                                  ;LDA $CA
+db $C9,$7E                                                  ;CMP #$7E
+db $D0,$06                                                  ;BNE $06
+db $A5,$CB                                                  ;LDA $CB
+db $C9,$7E                                                  ;CMP #$7E
 
-DATA_00_09D5:
-db $79,$10,$08,$00,$0B,$4C,$20,$08
-db $EA,$EA,$EA,$EA,$EA,$60,$EA,$EA
+SGBPacketData_OBJCode4_00_0995:
+db SGBCommand_RAMCopy<<3 | 1
+dla $00083C
+db 11
 
-DATA_00_09E5:
-db $99,$00,$00,$00,$00,$00,$00,$00
-db $00,$00,$00,$00,$00,$00,$00,$00
+db $F0,$12                                                  ;BEQ $12
+db $A5,$C9                                                  ;LDA $C9
+db $C9,$C8                                                  ;CMP #$C8
+db $D0,$1C                                                  ;BNE $1C
+db $A5,$CA                                                  ;LDA $CA
+db $C9                                                      ;CMP #$... (continued in the next packet)
+
+SGBPacketData_OBJCode5_00_09A5:
+db SGBCommand_RAMCopy<<3 | 1
+dla $000847
+db 11
+
+db $C4                                                      ;CMP #$C9 (continuing from the last packet)
+db $D0,$16                                                  ;BNE $16
+db $A5,$CB                                                  ;LDA $CB
+db $C9,$05                                                  ;CMP #$05
+db $D0,$10                                                  ;BNE $10
+db $A2,$28                                                  ;LDX #$28
+
+SGBPacketData_OBJCode6_00_09B5:
+db SGBCommand_RAMCopy<<3 | 1
+dla $000852
+db 11
+
+db $A9,$E7                                                  ;LDA #$E7
+db $9F                                                      ;\
+dla $7EC001                                                 ;/STA $7EC001,x
+ds 4, $E8                                                   ;INX #4
+db $E0                                                      ;CPX #$... (continued in the next packet)
+
+SGBPacketData_OBJCode7_00_09C5:
+db SGBCommand_RAMCopy<<3 | 1
+dla $00085D
+db 4
+
+db $8C                                                      ;CPX #$8C (continuing from the last packet)
+db $D0,$F4                                                  ;BNE $F4
+db $60                                                      ;RTS
+ds 7, $00                                                   ;no more code copying
+
+;supposed to precede the rest of above, yet loaded last.
+SGBPacketData_OBJCode8_00_09D5:
+db SGBCommand_RAMCopy<<3 | 1
+dla $000810
+db 11
+
+db $4C :: dw $0820                                          ;JMP $0820 (over all the NOPs)
+ds 5, $EA                                                   ;NOP #5
+db $60                                                      ;RTS
+ds 2, $EA                                                   ;NOP #2
+
+SGBPacketData_TransferSNESGFX_00_09E5:
+db SGBCommand_TransferSNESGFX<<3 | 1
+ds 15, $00
+
+;a packet used to enable transfer for SNES BG tiles and palette
+SGBPacketData_TransferSNESTilemapAndPal_00_09F5:
+db SGBCommand_TransferSNESTilemapAndPal<<3 | 1
+ds 15, $00
+
+;send one packet, mask mode
+SGBPacketData_EnableGameBoyMask_00_0A05:
+db SGBCommand_GameBoyMask<<3 | 1, SGB_GameBoyMaskMode_Black
+ds 14, $00
 
 ;send one packet
-DATA_00_09F5:
-db $A1,$00,$00,$00,$00,$00,$00,$00
-db $00,$00,$00,$00,$00,$00,$00,$00
-
-;send one packet
-DATA_00_0A05:
-db $B9,$02,$00,$00,$00,$00,$00,$00
-db $00,$00,$00,$00,$00,$00,$00,$00
-
-;send one packet
-DATA_00_0A15:
-db $B9,$00,$00,$00,$00,$00,$00,$00
-db $00,$00,$00,$00,$00,$00,$00,$00
+SGBPacketData_DisableGameBoyMask_00_0A15:
+db SGBCommand_GameBoyMask<<3 | 1, SGB_GameBoyMaskMode_None
+ds 14, $00
 
 InitFadeIn_00_0A25:
 LD A, $05                                                   ;
@@ -2036,67 +2106,69 @@ LoadDataSizeConstant BC, ScriptCommandPointers_02_6EB2      ;the size output is 
 CALL CopyData2_00_0C7D                                      ;
 RET                                                         ;
 
-;this routine will load a custom SGB border
-CODE_00_0C14:
-DI
-PUSH DE
-CALL DisableLCD_00_0FE0
+;this routine is used for graphicsl transfers from Game Boy to Super Nintendo Entertainment System with Super Game Boy
+SGB_SendSNESGraphicsData_00_0C14:
+DI                                                          ;
+PUSH DE                                                     ;
+CALL DisableLCD_00_0FE0                                     ;do tasks behind scenes
 
-LD A, $E4
-LD [Reg_BackgroundPalette], A
+LD A, $E4                                                   ;
+LD [Reg_BackgroundPalette], A                               ;palette must be this during transfer
 
-LD DE, $8800
-LD BC, $1000
-CALL CopyData2_00_0C7D
+LD DE, $8800                                                ;
+LD BC, $1000                                                ;transfer 4KB of data
+CALL CopyData2_00_0C7D                                      ;
 
-LD HL, $9800
-LD DE, $000C
-LD A, $80
-LD C, $0D
+LD HL, $9800                                                ;
+LD DE, 12                                                   ;extra tiles in the Game Boy tilemap to skip over
+LD A, $80                                                   ;some important recursive thing
+LD C, 13                                                    ;tile rows
 
 LOOP_00_0C31:
-LD B, $14
+LD B, 20                                                    ;width of the Game Boy screen
 
 LOOP_00_0C33:
-LD [HL+], A
-INC A
-DEC B
-JR NZ, LOOP_00_0C33
-ADD HL, DE
-DEC C
-JR NZ, LOOP_00_0C31
+LD [HL+], A                                                 ;
+INC A                                                       ;
+DEC B                                                       ;copy until a full row of tiles is done
+JR NZ, LOOP_00_0C33                                         ;
 
-LD A, LCDControlEnable|LCDBackgroundRender
-LD [Reg_LCDControlAndRender], A
+ADD HL, DE                                                  ;
+DEC C                                                       ;
+JR NZ, LOOP_00_0C31                                         ;
 
-LD BC, $0005
-CALL CODE_00_0C52
+LD A, LCDControlEnable|LCDBackgroundRender                  ;
+LD [Reg_LCDControlAndRender], A                             ;
 
-POP HL
-CALL SendSGBPacket_00_0395
+LD BC, $0005                                                ;also time wasting stuff (this doesn't actually seem important?)
+CALL SGB_WaitXFrames_00_0C52                                ;
 
-LD BC, $0006
-CALL CODE_00_0C52
-RET
+POP HL                                                      ;
+CALL SGB_SendPackets_00_0395                                ;execute transfer to SNES
 
-CODE_00_0C52:
-LD DE, 1750
+LD BC, $0006                                                ;wait about 6 frames (this might be important? sending graphics data to SNES...)
+CALL SGB_WaitXFrames_00_0C52                                ;
+RET                                                         ;
+
+;waits almost BC frames
+SGB_WaitXFrames_00_0C52:
+LD DE, 1750                                                 ;
 
 LOOP_00_0C55:
-NOP
-NOP
-NOP
-DEC DE
+NOP                                                         ;
+NOP                                                         ;
+NOP                                                         ;
 
-LD A, D
-OR E
-JR NZ, LOOP_00_0C55
+DEC DE                                                      ;
+LD A, D                                                     ;
+OR E                                                        ;
+JR NZ, LOOP_00_0C55                                         ;
 
-DEC BC
-LD A, B
-OR C
-JR NZ, CODE_00_0C52
-RET
+DEC BC                                                      ;
+LD A, B                                                     ;
+OR C                                                        ;
+JR NZ, SGB_WaitXFrames_00_0C52                              ;
+RET                                                         ;
 
 ;input:
 ;HL - pointer to data that must be cleared
@@ -2139,8 +2211,8 @@ LD A, [HL]                                                  ;
 LD [DE], A                                                  ;
 
 LD A, [DE]                                                  ;
-CP [HL]                                                     ;
-JR NZ, CopyData2_00_0C7D                                    ;I'm guessing this is a "protected" kind of write, because it checks if the write failed... to lock the game then?
+CP [HL]                                                     ;I'm guessing this is a "protected" kind of write, because it checks if the write failed... to lock the game then?
+JR NZ, CopyData2_00_0C7D                                    ;That or it's a safety net for in case writing to VRAM but failing, despite checking for a valid drawing mode earlier.
 
 INC DE                                                      ;
 INC HL                                                      ;
@@ -2161,92 +2233,113 @@ LOOP_00_0C8D:
 CheckPPUModes                                               ;wait for a moment to draw
 LD A, B                                                     ;
 LD [HL], A                                                  ;
+
 LD A, [HL]                                                  ;
 CP B                                                        ;
 JR NZ, LOOP_00_0C8D                                         ;lock the game if the write failed somehow?
 RET                                                         ;
 
-CheckSGB_00_0C95:
-LD HL, MltReq2Packet_00_0D14
-CALL SendSGBPacket_00_0395
+SGB_CheckHardware_00_0C95:
+LD HL, SGBPacketData_Request2Controllers_00_0D14            ;check if played on super game boy...
+CALL SGB_SendPackets_00_0395                                ;
 
-CALL Wait7000_00_03CB
-CALL Wait7000_00_03CB
+CALL SGB_Wait4Frames_00_03CB                                ;
+CALL SGB_Wait4Frames_00_03CB                                ;
 
-LD A, [Reg_JoyPad]
-AND $03
-CP $03
-JR NZ, CODE_00_0CF6
+LD A, [Reg_JoyPad]                                          ;
+AND $03                                                     ;
+CP $03                                                      ;note that when played on original Game Boy, 4 least significant bits will always be set, so the branches will never be taken
+JR NZ, SGB_DetectedSGB_00_0CF6                              ;
 
-LD A, $20
-LD [Reg_JoyPad], A
+LD A, $20                                                   ;some technical shenanigans I don't really understand, but most likely very important. I'll trust Pocket Love devs and Ninty.
+LD [Reg_JoyPad], A                                          ;
 
-LD A, [Reg_JoyPad]
-LD A, [Reg_JoyPad]
+LD A, [Reg_JoyPad]                                          ;
+LD A, [Reg_JoyPad]                                          ;
 
-LD A, $30
-LD [Reg_JoyPad], A
+LD A, $30                                                   ;
+LD [Reg_JoyPad], A                                          ;
 
-LD A, $10
-LD [Reg_JoyPad], A
-LD A, [Reg_JoyPad]
-LD A, [Reg_JoyPad]
-LD A, [Reg_JoyPad]
-LD A, [Reg_JoyPad]
-LD A, [Reg_JoyPad]
-LD A, [Reg_JoyPad]
+LD A, $10                                                   ;
+LD [Reg_JoyPad], A                                          ;
+LD A, [Reg_JoyPad]                                          ;I'm guessing this is for stability just like with standard joypad parsing.
+LD A, [Reg_JoyPad]                                          ;
+LD A, [Reg_JoyPad]                                          ;
+LD A, [Reg_JoyPad]                                          ;
+LD A, [Reg_JoyPad]                                          ;
+LD A, [Reg_JoyPad]                                          ;
 
-LD A, $30
-LD [Reg_JoyPad], A
+LD A, $30                                                   ;
+LD [Reg_JoyPad], A                                          ;
 
-LD A, [Reg_JoyPad]
-LD A, [Reg_JoyPad]
-LD A, [Reg_JoyPad]
-LD A, [Reg_JoyPad]
-AND $03
-CP $03
-JR NZ, CODE_00_0CF6
+LD A, [Reg_JoyPad]                                          ;
+LD A, [Reg_JoyPad]                                          ;
+LD A, [Reg_JoyPad]                                          ;
+LD A, [Reg_JoyPad]                                          ;the ID should change, indicating Super Game Boy. 
+AND $03                                                     ;
+CP $03                                                      ;
+JR NZ, SGB_DetectedSGB_00_0CF6                              ;
 
-LD HL, MltReq1Packet_00_0D04
-CALL SendSGBPacket_00_0395
-CALL Wait7000_00_03CB
-CALL Wait7000_00_03CB
-SUB A
+LD HL, SGBPacketData_Request1Controller_00_0D04             ;
+CALL SGB_SendPackets_00_0395                                ;still attempts to send a packet for some reason, but okay
+
+CALL SGB_Wait4Frames_00_03CB                                ;
+CALL SGB_Wait4Frames_00_03CB                                ;
+
+SUB A                                                       ;not on Super Game Boy
+RET                                                         ;
+
+SGB_DetectedSGB_00_0CF6:
+LD HL, SGBPacketData_Request1Controller_00_0D04             ;
+CALL SGB_SendPackets_00_0395                                ;
+
+CALL SGB_Wait4Frames_00_03CB                                ;
+CALL SGB_Wait4Frames_00_03CB                                ;
+
+SCF                                                         ;officially played via Super Game Boy
+RET                                                         ;
+
+;one controller
+SGBPacketData_Request1Controller_00_0D04:
+db SGBCommand_ControllerRequest << 3 | 1, SGB_ControllerRequest_1Player
+ds 14, $00
+
+;two controllers (tests if SGB hardware is on)
+SGBPacketData_Request2Controllers_00_0D14:
+db SGBCommand_ControllerRequest << 3 | 1, SGB_ControllerRequest_2Player
+ds 14, $00
+
+;load palettes for the Game Boy window on Super Game Boy (layer 3 on SNES, which is what is used for displaying Game Boy graphics)
+SGB_SetGameBoyPalettes_00_0D24:
+LD HL, SGBPacketData_GameBoyPals1And2_00_0D37
+CALL SGB_SendPackets_00_0395
+CALL SGB_Wait4Frames_00_03CB
+
+LD HL, SGBPacketData_AttributeFill_00_0D47
+CALL SGB_SendPackets_00_0395
+CALL SGB_Wait4Frames_00_03CB
 RET
 
-CODE_00_0CF6:
-LD HL, MltReq1Packet_00_0D04
-CALL SendSGBPacket_00_0395
-CALL Wait7000_00_03CB
-CALL Wait7000_00_03CB
-SCF
-RET
+SGBPacketData_GameBoyPals1And2_00_0D37:
+db SGBCommand_SetGameBoyPal01 << 3 | 1
+dw $7FFF
 
-MltReq1Packet_00_0D04:
-db $89,$00,$00,$00,$00,$00,$00,$00
-db $00,$00,$00,$00,$00,$00,$00,$00
+dw $1217
+dw $012C
+dw $0000
 
-MltReq2Packet_00_0D14:;whatever MLT is (i took this from pokemon red and blue disassembly)
-db $89,$01,$00,$00,$00,$00,$00,$00
-db $00,$00,$00,$00,$00,$00,$00,$00
+dw $033B                                                    ;interestingly, loads some other palette, but never uses it
+dw $0014
+dw $0000
 
-CODE_00_0D24:
-LD HL, DATA_00_0D37
-CALL SendSGBPacket_00_0395
-CALL Wait7000_00_03CB
+db $00
 
-LD HL, DATA_00_0D47
-CALL SendSGBPacket_00_0395
-CALL Wait7000_00_03CB
-RET
-
-DATA_00_0D37:
-db $01,$FF,$7F,$17,$12,$2C,$01,$00
-db $00,$3B,$03,$14,$00,$00,$00,$00
-
-DATA_00_0D47:
-db $31,$00,$00,$00,$00,$00,$00,$00
-db $00,$00,$00,$00,$00,$00,$00,$00
+;this makes it so the entire game boy area uses palette 0
+SGBPacketData_AttributeFill_00_0D47:
+db SGBCommand_SetAttrDivide << 3 | 1
+db SGB_GameBoyPalette0 | SGB_GameBoyPalette0 << 2 | SGB_GameBoyPalette0 << 4 | SGB_Divide_DivideLineVert
+db $00
+ds 13, $00
 
 ;manually searches for specific "expression" display data for each character appearance
 ;input:
