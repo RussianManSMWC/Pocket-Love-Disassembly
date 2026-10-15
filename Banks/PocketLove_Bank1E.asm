@@ -4485,7 +4485,7 @@ LD A, [HL]                                                  ;
 LD [DE], A                                                  ;
 
 LDH A, [Reg_LCDStatus]                                      ;
-BIT 1, A                                                    ;
+BitTest LCDStatus_Mode2, A                                  ;
 JR NZ, LOOP_1E_79C4                                         ;
 
 INC HL                                                      ;
@@ -4539,7 +4539,7 @@ XOR A                                                       ;
 LD [DE], A                                                  ;
 
 LDH A, [Reg_LCDStatus]                                      ;
-BIT 1, A                                                    ;
+BitTest LCDStatus_Mode2, A                                  ;
 JR NZ, LOOP_1E_7A04                                         ;
 
 INC DE                                                      ;

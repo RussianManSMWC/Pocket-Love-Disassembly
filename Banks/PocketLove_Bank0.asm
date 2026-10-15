@@ -70,7 +70,7 @@ RET                                                         ;
 SECTION "rst 30", ROM0[$30]
 LOOP_00_0030:
 LDH A, [Reg_LCDStatus]                                      ;checks if PPU is in "V-blank" or "drawing pixels" modes
-BIT 1, A                                                    ;
+BitTest LCDStatus_Mode2, A                                  ;
 JR NZ, LOOP_00_0030                                         ;loop until that isn't the case
 RET                                                         ;
 
@@ -129,9 +129,9 @@ CALL ClearSpriteData_00_0E53                                ;
 CALL DisableLCD_00_0FE0                                     ;
 
 XOR A                                                       ;
-LDH [Register_LCDYCompare], A                               ;
+LDH [Reg_LCDYCompare], A                                    ;
 
-LD A, $08                                                   ;
+LD A, LCDStatus_Mode0Request                                ;
 LDH [Reg_LCDStatus], A                                      ;
 
 CALL StoreOAMUploadCodeToRAM_00_01E2                        ;
@@ -176,10 +176,10 @@ LD A, $FF                                                   ;controls are defini
 LD [JoypadInputEnabler], A                                  ;
 
 LD A, $78                                                   ;
-LDH [Register_LCDYCompare], A                               ;
+LDH [Reg_LCDYCompare], A                                    ;
 
-LD A, $44                                                   ;
-LDH [Reg_LCDStatus], A                                      ;sets some LCD status triggers
+LD A, LCDStatus_LCDYCheck|LCDStatus_LCDYEqualCheck          ;
+LDH [Reg_LCDStatus], A                                      ;wait for LCDY check (also sets equal flag?)
 
 LD A, LCDBackgroundRender|LCDSpriteRender|LCDSpriteSize|LCDControlEnable
 LDH [Reg_LCDControlAndRender], A                            ;
@@ -422,7 +422,7 @@ LD A, LCDControlEnable|LCDWindowTilemapSelect|LCDSpriteSize ;
 LD [Reg_LCDControlAndRender], A                             ;
 
 LOOP_00_02FD:
-LD A, [Register_LCDYPos]                                    ;
+LD A, [Reg_LCDYPos]                                         ;
 OR A                                                        ;
 JR NZ, LOOP_00_02FD                                         ;
 
@@ -2106,7 +2106,7 @@ LoadDataSizeConstant BC, ScriptCommandPointers_02_6EB2      ;the size output is 
 CALL CopyData2_00_0C7D                                      ;
 RET                                                         ;
 
-;this routine is used for graphicsl transfers from Game Boy to Super Nintendo Entertainment System with Super Game Boy
+;this routine is used for graphics transfers from Game Boy to Super Nintendo Entertainment System with Super Game Boy
 SGB_SendSNESGraphicsData_00_0C14:
 DI                                                          ;
 PUSH DE                                                     ;
@@ -2177,12 +2177,13 @@ ClearData_00_0C63:
 CheckPPUModes                                               ;
 XOR A                                                       ;
 LD [HL], A                                                  ;
+
 LDH A, [Reg_LCDStatus]                                      ;
-BIT 1, A                                                    ;
+BitTest LCDStatus_Mode2, A                                  ;
 JR NZ, ClearData_00_0C63                                    ;
+
 INC HL                                                      ;
 DEC BC                                                      ;
-
 LD A, C                                                     ;
 OR B                                                        ;
 JR NZ, ClearData_00_0C63                                    ;
@@ -2311,7 +2312,7 @@ ds 14, $00
 
 ;load palettes for the Game Boy window on Super Game Boy (layer 3 on SNES, which is what is used for displaying Game Boy graphics)
 SGB_SetGameBoyPalettes_00_0D24:
-LD HL, SGBPacketData_GameBoyPals1And2_00_0D37
+LD HL, SGBPacketData_GameBoyPals0And1_00_0D37
 CALL SGB_SendPackets_00_0395
 CALL SGB_Wait4Frames_00_03CB
 
@@ -2320,7 +2321,7 @@ CALL SGB_SendPackets_00_0395
 CALL SGB_Wait4Frames_00_03CB
 RET
 
-SGBPacketData_GameBoyPals1And2_00_0D37:
+SGBPacketData_GameBoyPals0And1_00_0D37:
 db SGBCommand_SetGameBoyPal01 << 3 | 1
 dw $7FFF
 
@@ -3001,7 +3002,7 @@ ResetBit Interrupt_VBlank, A                                ;
 LD [Reg_InterruptsEnabler], A                               ;
 
 LOOP_00_0FF1:
-LD A, [Register_LCDYPos]                                    ;
+LD A, [Reg_LCDYPos]                                         ;
 CP $91                                                      ;LCD can only be disabled during VBlank, or the hardware can get damaged. serious stuff.
 JR NZ, LOOP_00_0FF1                                         ;
 
@@ -8812,7 +8813,7 @@ LD A, [HL]                                                  ;
 LD [DE], A                                                  ;
 
 LDH A, [Reg_LCDStatus]                                      ;
-BIT 1, A                                                    ;
+BitTest LCDStatus_Mode2, A                                  ;
 JR NZ, TransferData_00_2FA1                                 ;
 
 INC HL                                                      ;

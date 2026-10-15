@@ -23,8 +23,8 @@ def SGBCommand_ControllerRequest rb 1                       ;request x amount of
 def SGBCommand_JMP rb 1                                     ;set up NMI and PC to execute custom SNES code
 def SGBCommand_TransferSNESGFX rb 1                         ;transfers graphics to SNES VRAM
 def SGBCommand_TransferSNESTilemapAndPal rb 1               ;transfers tilemap and palette to SNES VRAM (good for borders)
-def SGBCommand_SetAttributeGameBoy rb 1                     ;defines a so-called "ATF" that can be picked with transfer command
-def SGBCommand_TransferAttributeGameBoy rb 1
+def SGBCommand_StoreAttributeFiles rb 1                     ;defines so-called "ATF"s that can be picked with a load command
+def SGBCommand_LoadAttributeFile rb 1                       ;load one of the defined ATFs
 def SGBCommand_GameBoyMask rb 1
 def SGBCommand_TransferSNESSprites rb 1                     ;doesn't do anything in release SGB
 def SGBCommand_PalPriority rb 1

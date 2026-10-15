@@ -689,7 +689,7 @@ ResetBit Interrupt_VBlank, A                                ;
 LD [Reg_InterruptsEnabler], A                               ;
 
 LOOP_1D_7438:
-LD A, [Register_LCDYPos]                                    ;
+LD A, [Reg_LCDYPos]                                         ;
 CP $91                                                      ;LCD can only be disabled during VBlank, or the hardware can get damaged. serious stuff.
 JR NZ, LOOP_1D_7438                                         ;
 
@@ -1975,7 +1975,7 @@ LD A, [HL]                                                  ;
 LD [DE], A                                                  ;
 
 LDH A, [Reg_LCDStatus]                                      ;check PPU modes again for good measure
-BIT 1, A                                                    ;
+BitTest LCDStatus_Mode2, A                                  ;
 JR NZ, LOOP_1D_7B11                                         ;
 
 INC HL                                                      ;
@@ -2028,7 +2028,7 @@ XOR A                                                       ;clear tile
 LD [DE], A                                                  ;
 
 LDH A, [Reg_LCDStatus]                                      ;
-BIT 1, A                                                    ;
+BitTest LCDStatus_Mode2, A                                  ;
 JR NZ, LOOP_1D_7B51                                         ;
 
 INC DE                                                      ;
