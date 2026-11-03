@@ -287,7 +287,7 @@ dw .ScriptCommand_Skip4Bytes_02_719A ;11
 dw .ScriptCommand_StoreToVarFromVar_02_71A9 ;12
 dw .ScriptCommand_StoreToVar8Bit_02_71E3 ;13
 dw .ScriptCommand_StoreRNGToVar16Bit_02_720C ;14
-dw .ScriptCommandStoreRNGToVar8Bit_02_723A ;15
+dw .ScriptCommand_StoreRNGToVar8Bit_02_723A ;15
 dw .ScriptCommand_AddToVar8Bit_02_7266 ;16
 dw .ScriptCommand_SubFromVar8Bit_02_7296 ;17
 dw .ScriptCommand_Branch_02_72EA ;18
@@ -339,7 +339,7 @@ dw .ScriptCommand_InviteCharacterForADate_02_7AB0 ;45
 dw .ScriptCommand_AffectRelationshipByGift_02_7ADA ;46
 dw .ScriptCommand_Print8BitVariableValue_02_7B20 ;47
 dw .ScriptCommand_Print16BitVariableValue_02_7B6A ;48
-dw .ScriptCommand_SeedRNG_02_7BB4 ;49 seed RNG?
+dw .ScriptCommand_SeedRNG_02_7BB4 ;49
 dw .ScriptCommand_DebugSingleVariableEditor_02_7BDB ;4A
 dw .ScriptCommand_DebugVariableEditorAndViewer_02_7CEE ;4B
 
@@ -1119,7 +1119,7 @@ POP DE
 RET
 
 ;ModifyVariable_8BitRNGStore
-.ScriptCommandStoreRNGToVar8Bit_02_723A:
+.ScriptCommand_StoreRNGToVar8Bit_02_723A:
 LD A, $01
 LD [ContinueProcessingScriptFlag], A
 

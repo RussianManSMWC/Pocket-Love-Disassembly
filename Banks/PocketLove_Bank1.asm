@@ -119,28 +119,28 @@ EndChannelProcessing
 ;I think these would've been common sound "headers" if there were more songs using them
 
 ;unused sound data
-DefineVolume 0,  210
-DefineVolume 1,  209
-DefineVolume 2,  113
-DefineVolume 3,  213
+DefineVolume 0, 13, -2
+DefineVolume 1, 13, -1
+DefineVolume 2, 7, -1
+DefineVolume 3, 13, -5
 SetChannelDuty 1
 SetChannelPan 3
 ReturnFromDataBlock
 
 ;also unused sound data
-DefineVolume 0,  147
-DefineVolume 1,  149
-DefineVolume 2,  144
-DefineVolume 3,  116
+DefineVolume 0, 9, -3
+DefineVolume 1, 9, -5
+DefineVolume 2, 9, 0
+DefineVolume 3, 7, -4
 SetChannelDuty 3
 SetChannelPan 3
 ReturnFromDataBlock
 
 ;used by Music_ScheduleScreenWorkWeek
 SoundDataBlock_01_5C04:
-DefineVolume 0,  129
-DefineVolume 1,  65
-DefineVolume 2,  67
+DefineVolume 0, 8, -1
+DefineVolume 1, 4, -1
+DefineVolume 2, 4, -3
 SetNoiseClockDivisor 1
 SetChannelPan 3
 ReturnFromDataBlock

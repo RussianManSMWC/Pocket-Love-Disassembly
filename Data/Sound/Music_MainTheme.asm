@@ -2,8 +2,8 @@
 
 Music_MainTheme_Square1Data_01_40DC:
 SetTempo 2
-DefineVolume 0,  228
-DefineVolume 1,  227
+DefineVolume 0, 14, -4
+DefineVolume 1, 14, -3
 SetChannelDuty 1
 SetChannelPan 3
 
@@ -101,10 +101,10 @@ ReturnFromDataBlock
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;square 2
 
 Music_MainTheme_Square2Data_01_418F:
-DefineVolume 0,  147
-DefineVolume 1,  149
-DefineVolume 2,  144
-DefineVolume 3,  87
+DefineVolume 0, 9, -3
+DefineVolume 1, 9, -5
+DefineVolume 2, 9, 0
+DefineVolume 3, 5, -7
 SetChannelPan 3
 
 SoundLoop_01_4198:
@@ -225,9 +225,9 @@ ReturnFromDataBlock
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;wave
 
 Music_MainTheme_WaveData_01_4270:
-DefineVolume 0,  38
-DefineVolume 1,  208
-DefineVolume 2,  108
+DefineVolume 0, 2, -6
+DefineVolume 1, 13, 0
+DefineVolume 2, 6, 4
 EnableChannelPanning 1
 
 SetNote $6F, 80, 0
@@ -371,9 +371,9 @@ ReturnFromDataBlock
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;noise
 
 Music_MainTheme_NoiseData_01_4376:
-DefineVolume 0,  129
-DefineVolume 1,  65
-DefineVolume 2,  68
+DefineVolume 0, 8, -1
+DefineVolume 1, 4, -1
+DefineVolume 2, 4, -4
 SetNoiseClockDivisor 1
 SetChannelPan 3
 

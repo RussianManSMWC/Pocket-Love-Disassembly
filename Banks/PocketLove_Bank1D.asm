@@ -1973,10 +1973,8 @@ LOOP_1D_7B11:
 CheckPPUModes                                               ;
 LD A, [HL]                                                  ;
 LD [DE], A                                                  ;
-
-LDH A, [Reg_LCDStatus]                                      ;check PPU modes again for good measure
-BitTest LCDStatus_Mode2, A                                  ;
-JR NZ, LOOP_1D_7B11                                         ;
+ 
+CheckPPUModesDirect LOOP_1D_7B11                            ;check PPU modes again for good measure
 
 INC HL                                                      ;
 INC DE                                                      ;
@@ -2027,9 +2025,7 @@ CheckPPUModes                                               ;
 XOR A                                                       ;clear tile
 LD [DE], A                                                  ;
 
-LDH A, [Reg_LCDStatus]                                      ;
-BitTest LCDStatus_Mode2, A                                  ;
-JR NZ, LOOP_1D_7B51                                         ;
+CheckPPUModesDirect LOOP_1D_7B51                            ;
 
 INC DE                                                      ;
 DEC C                                                       ;

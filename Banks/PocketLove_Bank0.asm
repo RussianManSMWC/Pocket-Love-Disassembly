@@ -2178,9 +2178,7 @@ CheckPPUModes                                               ;
 XOR A                                                       ;
 LD [HL], A                                                  ;
 
-LDH A, [Reg_LCDStatus]                                      ;
-BitTest LCDStatus_Mode2, A                                  ;
-JR NZ, ClearData_00_0C63                                    ;
+CheckPPUModesDirect ClearData_00_0C63                       ;
 
 INC HL                                                      ;
 DEC BC                                                      ;
@@ -8812,9 +8810,7 @@ CheckPPUModes                                               ;
 LD A, [HL]                                                  ;
 LD [DE], A                                                  ;
 
-LDH A, [Reg_LCDStatus]                                      ;
-BitTest LCDStatus_Mode2, A                                  ;
-JR NZ, TransferData_00_2FA1                                 ;
+CheckPPUModesDirect TransferData_00_2FA1                    ;
 
 INC HL                                                      ;
 INC DE                                                      ;

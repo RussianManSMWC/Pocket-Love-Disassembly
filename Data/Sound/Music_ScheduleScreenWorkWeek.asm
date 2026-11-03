@@ -1,8 +1,8 @@
 Music_ScheduleScreenWorkWeek_Square1Data_01_438D:
 SetTempo 4
-DefineVolume 0,  226
-DefineVolume 1,  225
-DefineVolume 2,  229
+DefineVolume 0, 14, -2
+DefineVolume 1, 14, -1
+DefineVolume 2, 14, -5
 SetChannelDuty 1
 SetChannelPan 3
 SetBaseFrequencyOffset -1
@@ -103,10 +103,10 @@ SetNote $03, 56, 0
 ReturnFromDataBlock
 
 Music_ScheduleScreenWorkWeek_Square2Data_01_444B:
-DefineVolume 0,  147
-DefineVolume 1,  149
-DefineVolume 2,  144
-DefineVolume 3,  116
+DefineVolume 0, 9, -3
+DefineVolume 1, 9, -5
+DefineVolume 2, 9, 0
+DefineVolume 3, 7, -4
 SetChannelDuty 3
 SetChannelPan 3
 SetBaseFrequencyOffset -1
@@ -193,9 +193,9 @@ SetNote $6F, 24, 0
 ReturnFromDataBlock
 
 Music_ScheduleScreenWorkWeek_WaveData_01_44F1:
-DefineVolume 0,  38
-DefineVolume 1,  208
-DefineVolume 2,  108
+DefineVolume 0, 2, -6
+DefineVolume 1, 13, 0
+DefineVolume 2, 6, 4
 EnableChannelPanning 1
 SetBaseFrequencyOffset -1
 

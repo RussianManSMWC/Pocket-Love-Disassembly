@@ -4484,9 +4484,7 @@ CheckPPUModes                                               ;
 LD A, [HL]                                                  ;
 LD [DE], A                                                  ;
 
-LDH A, [Reg_LCDStatus]                                      ;
-BitTest LCDStatus_Mode2, A                                  ;
-JR NZ, LOOP_1E_79C4                                         ;
+CheckPPUModesDirect LOOP_1E_79C4                            ;
 
 INC HL                                                      ;
 INC DE                                                      ;
@@ -4538,9 +4536,7 @@ CheckPPUModes                                               ;
 XOR A                                                       ;
 LD [DE], A                                                  ;
 
-LDH A, [Reg_LCDStatus]                                      ;
-BitTest LCDStatus_Mode2, A                                  ;
-JR NZ, LOOP_1E_7A04                                         ;
+CheckPPUModesDirect LOOP_1E_7A04                            ;
 
 INC DE                                                      ;
 DEC C                                                       ;

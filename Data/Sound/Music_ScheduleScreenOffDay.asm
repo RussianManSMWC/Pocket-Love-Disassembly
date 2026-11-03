@@ -1,8 +1,8 @@
 Music_ScheduleScreenOffDay_Square1Data_01_53BE:
 SetTempo 2
-DefineVolume 0,  226
-DefineVolume 1,  227
-DefineVolume 2,  113
+DefineVolume 0, 14, -2
+DefineVolume 1, 14, -3
+DefineVolume 2, 7, -1
 SetChannelDuty 1
 SetChannelPan 3
 
@@ -78,9 +78,9 @@ SetNote $07, 40, 1
 ReturnFromDataBlock
 
 Music_ScheduleScreenOffDay_Square2Data_01_5451:
-DefineVolume 0,  147
-DefineVolume 1,  149
-DefineVolume 2,  134
+DefineVolume 0, 9, -3
+DefineVolume 1, 9, -5
+DefineVolume 2, 8, -6
 SetChannelPan 3
 SetChannelDuty 2
 
@@ -88,7 +88,7 @@ SoundLoop_01_5459:
 SetNote $24, 60, 2
 SetNote $26, 20, 2
 SetNote $28, 60, 2
-DefineVolume 2,  102
+DefineVolume 2, 6, -6
 SetChannelDuty 3
 SetNote $6F, 60, 0
 SetNote $2D, 60, 1
@@ -170,8 +170,8 @@ SetNote $22, 40, 2
 SoundBranch SoundLoop_01_5459
 
 Music_ScheduleScreenOffDay_WaveData_01_54FE:
-DefineVolume 0,  38
-DefineVolume 1,  208
+DefineVolume 0, 2, -6
+DefineVolume 1, 13, 0
 EnableChannelPanning 1
 
 SoundLoop_01_5503:
@@ -344,9 +344,9 @@ SetNote $29, 20, 1
 ReturnFromDataBlock
 
 Music_ScheduleScreenOffDay_NoiseData_01_5647:
-DefineVolume 0,  129
-DefineVolume 1,  65
-DefineVolume 2,  67
+DefineVolume 0, 8, -1
+DefineVolume 1, 4, -1
+DefineVolume 2, 4, -3
 SetNoiseClockDivisor 1
 SetChannelPan 3
 

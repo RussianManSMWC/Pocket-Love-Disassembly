@@ -1,7 +1,7 @@
 SFX_PhoneRing_Square1Data_01_5C41:
 SetTempo 3
-DefineVolume 0,  186
-DefineVolume 1,  130
+DefineVolume 0, 11, 2
+DefineVolume 1, 8, -2
 
 ExecuteDataBlock SoundDataBlock_01_5C5F
 ExecuteDataBlock SoundDataBlock_01_5C5F
@@ -29,8 +29,8 @@ SetNote $6F, 128, 0
 ReturnFromDataBlock
 
 SFX_PhoneRing_Square2Data_01_5C6E:
-DefineVolume 0,  154
-DefineVolume 1,  114
+DefineVolume 0, 9, 2
+DefineVolume 1, 7, -2
 SetBaseFrequencyOffset -5
 
 SetNote $6F, 8, 0

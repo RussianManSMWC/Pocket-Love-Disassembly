@@ -1,7 +1,7 @@
 Music_NewGame_Square1Data_01_49CB:
 SetTempo 2
-DefineVolume 0,  226
-DefineVolume 1,  229
+DefineVolume 0, 14, -2
+DefineVolume 1, 14, -5
 SetChannelDuty 1
 SetChannelPan 3
 SetNote $6F, 56, 0
@@ -135,9 +135,9 @@ SetNote $04, 84, 1
 ReturnFromDataBlock
 
 Music_NewGame_Square2Data_01_4ACF:
-DefineVolume 0,  147
-DefineVolume 1,  149
-DefineVolume 2,  87
+DefineVolume 0, 9, -3
+DefineVolume 1, 9, -5
+DefineVolume 2, 5, -7
 SetChannelDuty 3
 SetChannelPan 3
 SetBaseFrequencyOffset -7
@@ -272,9 +272,9 @@ SetNote $34, 28, 0
 SoundBranch SoundLoop_01_4ADD
 
 Music_NewGame_WaveData_01_4BD6:
-DefineVolume 0,  38
-DefineVolume 1,  208
-DefineVolume 2,  108
+DefineVolume 0, 2, -6
+DefineVolume 1, 13, 0
+DefineVolume 2, 6, 4
 EnableChannelPanning 1
 SetNote $6F, 56, 0
 
@@ -428,9 +428,9 @@ SetNote $32, 12, 1
 ReturnFromDataBlock
 
 Music_NewGame_NoiseData_01_4CF6:
-DefineVolume 0,  129
-DefineVolume 1,  65
-DefineVolume 2,  67
+DefineVolume 0, 8, -1
+DefineVolume 1, 4, -1
+DefineVolume 2, 4, -3
 SetNoiseClockDivisor 1
 SetChannelPan 3
 SetNote $6F, 56, 0

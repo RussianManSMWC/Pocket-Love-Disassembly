@@ -1,8 +1,8 @@
 Music_06_Square1Data_01_4E2D:
 SetTempo 3
-DefineVolume 0,  226
-DefineVolume 1,  229
-DefineVolume 2,  115
+DefineVolume 0, 14, -2
+DefineVolume 1, 14, -5
+DefineVolume 2, 7, -3
 SetChannelDuty 1
 SetChannelPan 3
 
@@ -66,8 +66,8 @@ SetNote $09, 48, 0
 ReturnFromDataBlock
 
 Music_06_Square2Data_01_4EA8:
-DefineVolume 0,  145
-DefineVolume 1,  149
+DefineVolume 0, 9, -1
+DefineVolume 1, 9, -5
 SetChannelPan 3
 
 SoundLoop_01_4EAD:
@@ -136,8 +136,8 @@ SetNote $2A, 24, 1
 SoundBranch SoundLoop_01_4EAD
 
 Music_06_WaveData_01_4F2A:
-DefineVolume 0,  32
-DefineVolume 1,  208
+DefineVolume 0, 2, 0
+DefineVolume 1, 13, 0
 EnableChannelPanning 1
 
 SoundLoop_01_4F2F:
@@ -203,9 +203,9 @@ SetNote $2B, 24, 0
 ReturnFromDataBlock
 
 Music_06_NoiseData_01_4F9F:
-DefineVolume 0,  129
-DefineVolume 1,  65
-DefineVolume 2,  67
+DefineVolume 0, 8, -1
+DefineVolume 1, 4, -1
+DefineVolume 2, 4, -3
 SetNoiseClockDivisor 1
 SetChannelPan 3
 

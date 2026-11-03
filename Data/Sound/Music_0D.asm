@@ -1,8 +1,8 @@
 Music_0D_Square1Data_01_5A54:
 SetTempo 2
-DefineVolume 0,  151
-DefineVolume 1,  103
-DefineVolume 2,  96
+DefineVolume 0, 9, -7
+DefineVolume 1, 6, -7
+DefineVolume 2, 6, 0
 SetChannelDuty 1
 SetChannelPan 3
 SetBaseFrequencyOffset -2
@@ -109,8 +109,8 @@ SetNote $17, 36, 1
 ReturnFromDataBlock
 
 Music_0D_Square2Data_01_5B13:
-DefineVolume 0,  150
-DefineVolume 1,  144
+DefineVolume 0, 9, -6
+DefineVolume 1, 9, 0
 SetChannelDuty 3
 SetChannelPan 3
 SetBaseFrequencyOffset -2
@@ -180,9 +180,9 @@ SetNote $2C, 108, 0
 ReturnFromDataBlock
 
 Music_0D_WaveData_01_5B95:
-DefineVolume 0,  32
-DefineVolume 1,  208
-DefineVolume 2,  108
+DefineVolume 0, 2, 0
+DefineVolume 1, 13, 0
+DefineVolume 2, 6, 4
 SetChannelPan 3
 SetBaseFrequencyOffset -2
 

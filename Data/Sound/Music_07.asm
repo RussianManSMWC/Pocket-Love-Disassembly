@@ -1,7 +1,7 @@
 Music_07_Square1Data_01_4FBA:
 SetTempo 1
-DefineVolume 0,  151
-DefineVolume 1,  103
+DefineVolume 0, 9, -7
+DefineVolume 1, 6, -7
 SetChannelDuty 1
 SetChannelPan 3
 
@@ -97,8 +97,8 @@ SetNote $19, 16, 1
 ReturnFromDataBlock
 
 Music_07_Square2Data_01_506C:
-DefineVolume 0,  150
-DefineVolume 1,  144
+DefineVolume 0, 9, -6
+DefineVolume 1, 9, 0
 SetChannelDuty 3
 SetChannelPan 3
 
@@ -167,9 +167,9 @@ SetNote $31, 32, 0
 ReturnFromDataBlock
 
 Music_07_WaveData_01_50EC:
-DefineVolume 0,  32
-DefineVolume 1,  208
-DefineVolume 2,  108
+DefineVolume 0, 2, 0
+DefineVolume 1, 13, 0
+DefineVolume 2, 6, 4
 SetChannelPan 3
 
 SoundLoop_01_50F3:

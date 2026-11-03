@@ -1,8 +1,8 @@
 Music_0B_Square1Data_01_566A:
 SetTempo 2
-DefineVolume 0,  132
-DefineVolume 1,  134
-DefineVolume 2,  128
+DefineVolume 0, 8, -4
+DefineVolume 1, 8, -6
+DefineVolume 2, 8, 0
 SetChannelPan 3
 SetBaseFrequencyOffset 12
 SetChannelDuty 2
@@ -12,7 +12,7 @@ ExecuteDataBlock SoundDataBlock_01_479F                     ;reuses a little chu
 SoundBranch SoundLoop_01_5676
 
 Music_0B_Square2Data_01_567C:
-DefineVolume 0,  70
+DefineVolume 0, 4, -6
 SetChannelDuty 2
 SetChannelPan 3
 
@@ -81,8 +81,8 @@ SetNote $1C, 44, 0
 ReturnFromDataBlock
 
 Music_0B_WaveData_01_56FA:
-DefineVolume 0,  32
-DefineVolume 1,  208
+DefineVolume 0, 2, 0
+DefineVolume 1, 13, 0
 SetChannelPan 3
 
 SoundLoop_01_56FF:

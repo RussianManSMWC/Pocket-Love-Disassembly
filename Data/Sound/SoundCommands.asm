@@ -47,8 +47,22 @@ endm
 
 macro DefineVolume
   assert \1 <= 7, "Volume array index must be between 0 and 7."
+  assert \2 <= 15, "Volume cannot be higher than 15."
   db $E8+\1
-  db \2
+  if \3 < 0
+    db \2 << 4 | -\3 ;should result in -- which is a plus... right?
+  elif \3 == 0
+    db \2 << 4 | \3
+  else
+    db \2 << 4 | \3 | $08
+  endc
+endm
+
+macro DefineVolumeWave
+  assert \1 <= 7, "Volume array index must be between 0 and 7."
+  db $E8+\1
+  assert \2 <= 3, "Wave's volume value must be between 0 and 3."
+  db \2 << 5
 endm
 
 macro SetChannelDuty

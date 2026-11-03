@@ -30,9 +30,18 @@ This should be set once at the beginning of any of the channels. This affects AL
 **DefineVolume**
 This instruction defines a volume value that can be quickly referenced in the song or sound effect.
 First argument is an index of the volume value. There can be up to 8 different volume configurations, from 0 to 7.
-Second argument is the volume value.
+Second argument is the volume value, between 0 and 15.
+Third argument is envelope. Values 0-7 determine how long it takes to change volume. If set to 0, the envelope will not be used. If signed with minus (-), the volume will decrease, otherwise it'll increase.
 
 This should be used at the beginning of the song or SFX to set up commonly used volume values.
+NOTE: Don't use this command for Wave channel. It has a separate DefineVolume command listed below.
+Vanilla game seems to treat Wave like other channels, and thus uses DefineVolume as normal.
+
+
+**DefineVolumeWave**
+A similar instruction to DefineVolume but specifically for wave channel, which lacks an envelope and has 4 volume presets.
+First argument is an index of the volume value. There can be up to 8 different volume configurations, from 0 to 7.
+Second argument is the volume value, between 0 and 3, which represent 0%, 100%, 50% and 25% volume, respectively.
 
 
 **SetBaseFrequencyOffset**

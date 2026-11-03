@@ -1,15 +1,21 @@
 ;arguments: word, address (works with A register)
-MACRO StoreWord
+macro StoreWord
   LD A, LOW(\1)
   LD [\2], A
 
   LD A, HIGH(\1)
   LD [\2+1], A 
-ENDM
+endm
 
 macro CheckPPUModes
   RST $30
-ENDM
+endm
+
+macro CheckPPUModesDirect
+  LDH A, [Reg_LCDStatus]
+  BitTest LCDStatus_Mode2, A
+  JR NZ, \1
+endm
 
 macro BitTest
   BIT LOG(\1<<16,2.0)>>16, \2

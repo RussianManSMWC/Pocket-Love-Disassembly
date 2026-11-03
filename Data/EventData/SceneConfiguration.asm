@@ -2,7 +2,7 @@
 ;$FF - don't change music/background,  otherwise loads respective values
 ;first byte is music,  second is background.
 BackgroundAndMusicPerScene_03_4EAF:
-db $FF, $FF
+db $FF, $FF ;$00
 db Music_05, BG_SchoolEntrance
 db Music_05, BG_SchoolEntrance
 db Music_05, BG_SchoolEntrance
